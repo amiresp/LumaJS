@@ -19,9 +19,9 @@ Python here is an optional local server example; nginx, Apache, PHP, ASP.NET and
 
 ## Layout
 
-- `core/Luma.js` — lightweight registry, template fallback, independent component lifecycle
-- `components/Slider`, `components/Story` — behavior controllers
-- `themes/core-default` — overridable HTML/CSS and documented `data-id` hooks
+- `js/core/Luma.js` — lightweight registry, template fallback, independent component lifecycle
+- `js/dependency/global/GlobalComponents/Slider`, `js/dependency/global/GlobalComponents/Stories` — behavior controllers
+- `themes/core-default/dependency/Global` — overridable HTML/CSS and documented `data-id` hooks
 - `examples/basic` — zero-build demo
 - `AGENTS.md` — mandatory conventions for AI and human contributors
 - `docs/architecture.md` — runtime contract and alpha limitations
