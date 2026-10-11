@@ -1,5 +1,9 @@
-# Project-wide HTML hygiene checks
+# HTML5 validation
 
-Run `npm run check` locally. This runs `npm run validate:html` and `npm test` using Node.js built-in capabilities. **No npm install is required** for the current test suite: package.json has no dependencies. Node is for development/CI only, not the browser runtime.
+Run `npm install` (development only), then `npm run check`.
 
-The checker scans HTML files, detects accidental literal `\\n` and suspicious `/n` sequences. This is a **hygiene check, not a complete HTML5 syntax parser**. Full HTML structure validation must be added separately before a stable release. Inline JavaScript escapes should remain valid. See `tools/validate-html.js` and tests.
+HTML source is parsed with `parse5` and checked for HTML5 tokenizer/tree parsing errors plus literal `\\n` and isolated `/n` in visible text and attributes. Scripts and CSS bodies are exempt from the text escape rule. Parser-based checks handle malformed markup more reliably than ad-hoc regex, but **HTML5 permits some implicit tag closures** and this is not an accessibility or browser-rendering test.
+
+`npm test` runs Node's built-in test runner. `jsdom` supports DOM-level widget/runtime assertions. Neither library is bundled with the LumaJS browser runtime.
+
+CI installs test dependencies with npm and runs `npm run check`. A production site needs neither Node.js nor a build step.
