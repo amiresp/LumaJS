@@ -4,8 +4,8 @@ import { JSDOM } from "jsdom";
 import { CustomSelect } from "../js/shared/widgets/customSelect/customSelect.js";
 function setup(){
  const dom=new JSDOM('<!doctype html><html><body><div data-id="one" data-search-fields="attr_tokens"></div><div data-id="two"></div></body></html>',{url:"https://luma.test"});
- const old={document:globalThis.document, Element:globalThis.Element,CustomEvent:globalThis.CustomEvent};
- Object.assign(globalThis,{document:dom.window.document,Element:dom.window.Element,CustomEvent:dom.window.CustomEvent});
+ const old={document:globalThis.document, Element:globalThis.Element,CustomEvent:globalThis.CustomEvent,AbortController:globalThis.AbortController};
+ Object.assign(globalThis,{document:dom.window.document,Element:dom.window.Element,CustomEvent:dom.window.CustomEvent,AbortController:dom.window.AbortController});
  return {dom,restore(){Object.assign(globalThis,old);dom.window.close()}};
 }
 const data=[{value:"one",text:"One",attr_tokens:["alpha"]},{value:"two",text:"Two",attr_tokens:["beta"]}];
