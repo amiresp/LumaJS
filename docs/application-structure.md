@@ -14,3 +14,6 @@ Each app gets separate route definitions, Feature/Option/Caller maps, and Runtim
 `ApplicationRegistry` is intentionally outside Core. It supports exact-match routes, not nested/parameterized routing, guards, SSR, or server fallbacks. These will require separate adapters and tests.
 
 For apps sharing a single document, always pass a root scope into `hydrate(scope)` and `destroy(scope)`. Where apps share DOM and CSS, use explicit selectors and style scoping to avoid conflicts.
+
+
+Runnable reference implementation: `examples/structure/` combines shared `GlobalApp`/`GlobalCaller`, `js/Features/Sample/`, `js/Option/Sample/`, and `apps/website/pages/`. Original `wwwroot.zip` directory mapping and migration caveats: `docs/structure-guide.md`.
