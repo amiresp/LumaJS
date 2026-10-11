@@ -21,3 +21,12 @@ The original `wwwroot.zip` is the architecture reference. This PR now uses the o
 No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipeline. Components own their DOM subtree and cleanup. Theme overrides are HTML/CSS only and use stable `data-id` hooks.
 
 **Do not merge this draft as a feature-complete migration.** It is a minimal runnable skeleton with updated paths.
+
+
+## Structure and documentation update
+
+- Added neutral `GlobalApp` / `GlobalCaller`, Feature/Option/Caller starter contracts and app Pages; these preserve directory responsibilities from `wwwroot.zip`, but do not port all business logic.
+- Added `examples/structure/` and standalone `examples/custom-select/`.
+- Documented customSelect optional `attr_subtext` / `attr_tokens` searching and remaining advanced widget parity gaps.
+- Added offline navigation fallback `offline.html` via opt-in Service Worker; no private API caching.
+- Introduced documentation synchronization policy, CI documentation gate and contributor guide.
