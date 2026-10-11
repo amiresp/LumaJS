@@ -101,3 +101,15 @@ test("Slider navigation pagination and declarative options work",()=>{
   slider.destroy();
  }finally{env.restore();}
 });
+
+test("Slider responds to pointer swipe without activating DOM control buttons",()=>{
+ const env=domEnvironment('<div data-id="root"><div data-id="slides"><section data-id="slide">one</section><section data-id="slide">two</section></div><span data-id="counter"></span></div>');
+ try {
+  const root=env.dom.window.document.querySelector('[data-id="root"]');
+  const slider=new Slider(root,{autoplay:false});
+  root.dispatchEvent(new env.dom.window.MouseEvent("pointerdown",{bubbles:true,clientX:220,clientY:20}));
+  root.dispatchEvent(new env.dom.window.MouseEvent("pointerup",{bubbles:true,clientX:60,clientY:25}));
+  assert.equal(slider.index,1);
+  slider.destroy();
+ } finally {env.restore();}
+});
