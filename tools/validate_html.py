@@ -14,7 +14,7 @@ SKIP = {".git", "node_modules", "vendor", "dist", "build", "__pycache__"}
 ESCAPED_NEWLINE = re.compile(r"(?<!\\)\\n")
 # /n is not an escape sequence. Flag only where it is strongly suspicious, to
 # avoid rejecting URLs (/news) or legitimate user-facing text.
-SLASH_N = re.compile(r"(?:(?<=\\s)|(?<=>))/n(?=\\s|<|$)")
+SLASH_N = re.compile(r"(?:(?<=\s)|(?<=>))/n(?=\s|<|$)")
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input",
         "link", "meta", "param", "source", "track", "wbr"}
 RAW = {"script", "style", "pre", "code", "textarea"}
