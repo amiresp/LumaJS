@@ -66,3 +66,31 @@ test("destroying one scope does not cancel a pending sibling",async()=>{
     await runtime.destroy();
   }finally{env.restore();}
 });
+
+test("nested component is hydrated under parent and both clean up", async () => {
+  const env=setup('<div id="a" data-luma="A"></div>');
+  try {
+    env.assets.set("/themes/core-default/dependency/Global/A/A.html", '<div data-id="root"><div id="nested" data-luma="B"></div></div>');
+    env.assets.set("/themes/core-default/dependency/Global/B/B.html", '<div data-id="root">B</div>');
+    const cleaned=[];const runtime=new Luma({onError:()=>{}});
+    runtime.register("A",{load:async()=>({create:()=>({destroy(){cleaned.push("A")}})})});
+    runtime.register("B",{load:async()=>({create:()=>({destroy(){cleaned.push("B")}})})});
+    await runtime.hydrate();
+    assert.equal(document.getElementById("nested").dataset.loadState,"ready");
+    await runtime.destroy();
+    assert.deepEqual(cleaned.sort(),["A","B"]);
+  }finally{env.restore();}
+});
+test("restart of failed host can mount successfully after recovery",async()=>{
+  const env=setup('<div id="a" data-luma="A"></div>');
+  try {
+    const runtime=new Luma({onError:()=>{}});
+    runtime.register("A",{load:async()=>({create:()=>({destroy(){}})})});
+    await runtime.hydrate();
+    assert.equal(document.getElementById("a").dataset.loadState,"error");
+    env.assets.set("/themes/core-default/dependency/Global/A/A.html",'<div data-id="root"></div>');
+    await runtime.restart(document.getElementById("a"));
+    assert.equal(document.getElementById("a").dataset.loadState,"ready");
+    await runtime.destroy();
+  }finally{env.restore();}
+});
