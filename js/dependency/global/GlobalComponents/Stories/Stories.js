@@ -4,6 +4,9 @@ export class Stories {
     this.root = root;
     this.interval = interval;
     this.items = [...root.querySelectorAll('[data-id="story-item"]')];
+    this.galleries = [];
+    this.galleryIndex = 0;
+    this.progressFrame = null;
     this.viewer = root.querySelector('[data-id="viewer"]');
     this.index = 0;
     this.paused = false;
@@ -56,15 +59,72 @@ export class Stories {
     if (progress) progress.textContent = `${this.index + 1} / ${this.items.length}`;
     this.emit("change");
     this.stop();
+    this.cancelProgress();
     const media = this.items[this.index]?.querySelector("video");
     this.remaining = Number(this.items[this.index]?.dataset.duration) || (media?.duration > 0 ? media.duration * 1000 : this.interval);
+    this.updateProgress();
     if (!this.paused) this.resume();
+  }
+  /**
+   * Supply gallery-agnostic media data; render using safe DOM APIs.
+   * Item: {src, type:'image'|'video', alt, duration, title}.
+   */
+  setGalleries(galleries = []) {
+    if (!Array.isArray(galleries)) throw new TypeError("Galleries must be an array");
+    this.close();
+    this.galleries = galleries.map(gallery => ({
+      title: String(gallery.title ?? ""),
+      items: Array.isArray(gallery.items) ? gallery.items : []
+    }));
+    this.galleryIndex = 0;
+    this.setGallery(0);
+  }
+  setGallery(index) {
+    const gallery = this.galleries[index];
+    if (!gallery) return;
+    this.galleryIndex = index;
+    const container = this.root.querySelector('[data-id="story-items"]') || this.viewer;
+    for (const item of [...container.querySelectorAll('[data-id="story-item"]')]) item.remove();
+    const doc = this.root.ownerDocument;
+    for (const data of gallery.items) {
+      const element = doc.createElement("article");
+      element.dataset.id = "story-item";
+      if (Number.isFinite(data.duration) && data.duration > 0) element.dataset.duration = String(data.duration);
+      if (data.type === "video" || data.type === "image") {
+        const media = doc.createElement(data.type === "video" ? "video" : "img");
+        const raw = String(data.src ?? "");
+        const url = new URL(raw, doc.baseURI);
+        if (url.protocol === "https:" || url.protocol === "http:") media.src = url.href;
+        media.setAttribute("aria-label", String(data.alt ?? data.title ?? ""));
+        if (media.tagName === "VIDEO") { media.playsInline = true; media.muted = this.muted; media.preload = "metadata"; }
+        element.append(media);
+      }
+      const caption = doc.createElement("p");
+      caption.textContent = String(data.title ?? "");
+      element.append(caption);
+      container.append(element);
+    }
+    this.items = [...container.querySelectorAll('[data-id="story-item"]')];
+    this.show(0);
+  }
+  nextGallery() { if (this.galleryIndex + 1 < this.galleries.length) this.setGallery(this.galleryIndex + 1); else this.close(); }
+  previousGallery() { if (this.galleryIndex > 0) this.setGallery(this.galleryIndex - 1); }
+  updateProgress() {
+    const progress = this.root.querySelector('[data-id="progress-bar"]');
+    if (!progress) return;
+    const fraction = this.interval > 0 ? Math.min(1, Math.max(0, 1 - this.remaining / this.interval)) : 0;
+    progress.style.setProperty("--luma-progress", String(fraction));
+  }
+  cancelProgress() {
+    if (this.progressFrame != null && typeof cancelAnimationFrame === "function") cancelAnimationFrame(this.progressFrame);
+    this.progressFrame = null;
   }
   pause() {
     if (this.paused) return;
     this.paused = true;
     if (this.timer != null) this.remaining = Math.max(0, this.remaining - (Date.now() - this.startedAt));
     this.stop();
+    this.cancelProgress();
     this.items[this.index]?.querySelector("video")?.pause();
   }
   resume() {
@@ -93,6 +153,6 @@ export class Stories {
     if (this.lastFocused?.isConnected) this.lastFocused.focus();
     this.emit("close");
   }
-  destroy() { this.stop(); this.controller.abort(); if (this.viewer) this.viewer.hidden = true; }
+  destroy() { this.cancelProgress(); this.stop(); this.controller.abort(); if (this.viewer) this.viewer.hidden = true; }
 }
 export function create(root) { return new Stories(root); }
