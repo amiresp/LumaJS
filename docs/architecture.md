@@ -3,10 +3,10 @@
 LumaJS is a **browser-based, zero-build runtime**. Native ES modules load executable JavaScript. Any HTTP web server can serve the assets. Node.js is recommended for a sample backend, not required by the frontend.
 
 ## Boot sequence
-1. Load `core/Luma.js` from an HTML module script.
+1. Load `js/core/Luma.js` from an HTML module script.
 2. Register components by name with lazily imported modules.
 3. `runtime.hydrate()` scans outermost `[data-luma]` hosts.
-4. Runtime requests `themes/<active>/<Name>/<Name>.html`, falling back to `core-default`.
+4. Runtime requests `themes/<active>/dependency/Global/<Name>/<Name>.html`, falling back to `core-default`.
 5. Runtime imports the controller, loads matching CSS with fallback, and invokes `create(root, context)`.
 6. The controller returns a destroyable instance. Errors set `data-load-state="error"` and dispatch `luma:error`.
 7. `runtime.destroy(scope)` cleans controllers. `runtime.restart(scope)` destroys then mounts them again.
