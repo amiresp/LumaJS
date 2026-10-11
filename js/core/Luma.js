@@ -12,6 +12,7 @@ export class Luma {
     this.instances = new Map();
     this.inFlight = new Map();
     this.generation = 0;
+    this.revisions = new WeakMap();
   }
   register(name, definition) {
     if (!/^[A-Za-z][\w-]*$/.test(name)) throw new Error("Invalid component name");
@@ -57,23 +58,24 @@ export class Luma {
       this.fail(host, new Error(`Unregistered component: ${name}`));
       return null;
     }
-    const version = this.generation;
+    const version = this.revisions.get(host) || 0;
+    const current = () => (this.revisions.get(host) || 0) === version;
     const task = (async () => {
       host.dataset.loadState = "loading";
       let instance;
       try {
         const [html, module] = await Promise.all([this.template(name), definition.load()]);
-        if (version !== this.generation || !host.isConnected) return null;
+        if (!current() || !host.isConnected) return null;
         // HTML comes only from trusted application theme files.
         host.innerHTML = html;
         await this.style(name);
-        if (version !== this.generation || !host.isConnected) return null;
+        if (!current() || !host.isConnected) return null;
         const root = host.querySelector('[data-id="root"]') || host;
         const factory = module[definition.exportName || "create"];
         if (typeof factory !== "function") throw new Error(`Invalid component factory: ${name}`);
         instance = await factory(root, { runtime: this, host, name });
         if (!instance || typeof instance.destroy !== "function") throw new Error(`${name} must return a destroyable instance`);
-        if (version !== this.generation || !host.isConnected) {
+        if (!current() || !host.isConnected) {
           await instance.destroy();
           return null;
         }
@@ -83,7 +85,7 @@ export class Luma {
         return instance;
       } catch (error) {
         try { await instance?.destroy?.(); } catch (cleanupError) { this.onError(cleanupError, host); }
-        if (version === this.generation) this.fail(host, error);
+        if (current()) this.fail(host, error);
         return null;
       }
     })();
@@ -96,18 +98,26 @@ export class Luma {
     host.dispatchEvent(new CustomEvent("luma:error", { detail: { error }, bubbles: true }));
   }
   async hydrate(scope = document) {
-    const hosts = [...scope.querySelectorAll("[data-luma]")].filter(host => !host.parentElement?.closest("[data-luma]"));
+    const candidates = [ ...(scope.matches?.("[data-luma]") ? [scope] : []), ...scope.querySelectorAll("[data-luma]") ];
+    const hosts = candidates.filter(host => {
+      const parent = host.parentElement?.closest("[data-luma]");
+      return !parent || parent === scope || !scope.contains(parent);
+    });
     return Promise.allSettled(hosts.map(host => this.mount(host)));
   }
   async destroy(scope = document) {
-    this.generation++;
-    const entries = [...this.instances].filter(([host]) => scope === document || scope === host || scope.contains(host));
+    const inside = host => scope === document || scope === host || scope.contains(host);
+    const affected = new Set([...this.instances.keys(), ...this.inFlight.keys()].filter(inside));
+    for (const host of affected) this.revisions.set(host, (this.revisions.get(host) || 0) + 1);
+    const pending = [...this.inFlight.entries()].filter(([host]) => affected.has(host)).map(([, task]) => task);
+    const entries = [...this.instances].filter(([host]) => affected.has(host));
     await Promise.allSettled(entries.map(async ([host, instance]) => {
       this.instances.delete(host);
       try { await instance.destroy(); }
       catch (error) { this.onError(error, host); }
       delete host.dataset.loadState;
     }));
+    await Promise.allSettled(pending);
   }
   async restart(scope = document) {
     await this.destroy(scope);

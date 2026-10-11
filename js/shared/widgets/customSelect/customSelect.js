@@ -18,8 +18,8 @@ export function searchOptions(options, query, fields = ["text","attr_subtext","a
 const hook = (element, name) => element.querySelector(`[data-id="${name}"]`);
 const equal = (a,b) => JSON.stringify(a) === JSON.stringify(b);
 export class CustomSelect {
-  static openedInstance = null;
-  static closeAll() { CustomSelect.openedInstance?.closeDropdown(); }
+  static openByDocument = new WeakMap();
+  static closeAll(doc = document) { CustomSelect.openByDocument.get(doc)?.closeDropdown(); }
   constructor(element, options = [], placeholder = "Select...", label = "", isMulti = false,
               searchLabel = "Search...", searchLabelNotFound = "No results",
               excludeFrom = null, defaultValue = null) {
@@ -142,9 +142,9 @@ export class CustomSelect {
   }
   openDropdown() {
     if (this.destroyed) return;
-    CustomSelect.closeAll();
+    CustomSelect.closeAll(this.container.ownerDocument);
     this.isOpen = true;
-    CustomSelect.openedInstance = this;
+    CustomSelect.openByDocument.set(this.container.ownerDocument, this);
     this.dropdown.hidden = false;
     this.trigger.setAttribute("aria-expanded","true");
     this.renderOptions();
@@ -154,7 +154,7 @@ export class CustomSelect {
     this.isOpen = false;
     this.dropdown.hidden = true;
     this.trigger.setAttribute("aria-expanded","false");
-    if (CustomSelect.openedInstance === this) CustomSelect.openedInstance = null;
+    if (CustomSelect.openByDocument.get(this.container.ownerDocument) === this) CustomSelect.openByDocument.delete(this.container.ownerDocument);
   }
   selectIndex(index) {
     const item = this.options[index];
