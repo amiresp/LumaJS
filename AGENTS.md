@@ -24,3 +24,8 @@ Review and verify these rules in CI; prose rules alone are not a security bounda
 16. **Lifecycle isolation:** Dispose child components before parents, isolate error-reporting callbacks, and use bounded network/library load times. Include regression tests for fallback, pending mounts, restart, and nested cleanup.
 
 17. Core HTML fallback must be covered by tests; never use user/API content as HTML. Keep Network Retry bounded and only automatic for idempotent methods. Run npm run check and npm run test:browser when changing components or theme handling.
+
+18. **Structure compatibility:** preserve `js/dependency/global/GlobalApp.js`, `GlobalCaller.js`, app-owned Pages, feature/option App and Caller composition. This must remain instance scoped and backend-neutral; do not import domain-specific modules into Core.
+19. **Documentation synchronization is mandatory:** every source/API/theme/route change MUST update README.md, AGENTS.md, docs/architecture.md, docs/migration-status.md and relevant feature documentation, and include tests where behavior changes. CI checks for an accompanying documentation update; reviewers must verify semantic correctness. Read docs/maintenance.md.
+20. **customSelect is a supported standalone widget** at `js/shared/widgets/customSelect/`; document its optional attribute search and avoid hardcoded business data. Never claim full legacy parity before it is tested.
+21. **Offline page** lives at `offline.html`. Opt-in Service Worker may precache it for offline navigations, but must not cache authenticated responses or other private data.
