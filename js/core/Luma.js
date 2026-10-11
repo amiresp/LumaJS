@@ -1,3 +1,4 @@
+import { HttpClient } from "./HttpClient.js";
 import { ThemeResolver } from "../shared/ThemeResolver.js";
 /**
  * LumaJS browser runtime — zero production dependencies.
@@ -8,7 +9,8 @@ export class Luma {
     this.base = base.endsWith("/") ? base : base + "/";
     this.theme = theme;
     this.fallback = "core-default";
-    this.themeResolver = new ThemeResolver({ base: this.base, themes: [theme, fallback, "core-default"] });
+    this.http = new HttpClient();
+    this.themeResolver = new ThemeResolver({ base: this.base, themes: [theme, fallback, "core-default"], fetcher: (...args) => this.http.request(...args) });
     this.onError = onError;
     this.registry = new Map();
     this.instances = new Map();
@@ -24,7 +26,7 @@ export class Luma {
   }
   async text(path) {
     const url = new URL(path.replace(/^\//, ""), new URL(this.base, location.href));
-    const response = await fetch(url);
+    const response = await this.http.request(url);
     if (!response.ok) throw new Error(`HTTP ${response.status}: ${url.pathname}`);
     return response.text();
   }
