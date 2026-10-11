@@ -1,0 +1,1 @@
+export function renderHome(host){host.replaceChildren();const h=host.ownerDocument.createElement("h1");h.textContent="LumaJS website";const p=host.ownerDocument.createElement("p");p.textContent="Pages belong to the website app, not Core.";host.append(h,p);return {destroy(){host.replaceChildren();}};}
