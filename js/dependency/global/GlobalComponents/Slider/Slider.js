@@ -13,6 +13,8 @@ export class Slider {
     this.spaceBetween = Math.max(0, Number(attr.spaceBetween) || 0);
     this.effect = ["slide","fade"].includes(attr.effect) ? attr.effect : "slide";
     this.breakpoints = {};
+    this.maxItems = Math.max(0, Number(attr.maxItems) || 0);
+    this.galleryType = attr.galleryType || 'Slider';
     this.autoplay = autoplay;
     this.paused = false;
     this.observer = null;
@@ -150,7 +152,8 @@ export class Slider {
   setItems(items = []) {
     const doc = this.root.ownerDocument;
     if (!Array.isArray(items)) throw new TypeError("Slider items must be an array");
-    const nodes = items.map(item => {
+    const selected = this.maxItems ? items.slice(0,this.maxItems) : items;
+    const nodes = selected.map(item => {
       const slide = doc.createElement("section");
       slide.dataset.id = "slide";
       if (item.type === "image" || item.type === "video") {
@@ -161,15 +164,41 @@ export class Slider {
           if (["http:", "https:"].includes(url.protocol)) media.src = url.href;
         } catch { /* Skip invalid media URL. */ }
         media.setAttribute("aria-label", String(item.alt ?? ""));
+        if(item.type==="image")media.loading="lazy";
+        if(item.type==="video" && item.poster){
+          try { const poster=new URL(String(item.poster),doc.baseURI);if(["https:","http:"].includes(poster.protocol))media.poster=poster.href; } catch {}
+        }
         if (media.tagName === "VIDEO") { media.muted = true; media.playsInline = true; media.preload = "metadata"; }
         slide.append(media);
       }
       const title = doc.createElement("h2"); title.textContent = String(item.title ?? "");
       const paragraph = doc.createElement("p"); paragraph.textContent = String(item.text ?? "");
       slide.append(title, paragraph);
+      if(item.overlay){
+        const shade=doc.createElement("div");shade.dataset.id="slider-shade";shade.className="luma-slider-shade";slide.prepend(shade);
+      }
+      if(item.link){
+        try {
+          const href=new URL(String(item.link),doc.baseURI);
+          if(["http:","https:"].includes(href.protocol)){
+            const anchor=doc.createElement("a");anchor.href=href.href;anchor.dataset.id="slider-link";
+            anchor.textContent=String(item.linkText??"Learn more");
+            if(href.origin!==doc.location?.origin)anchor.rel="noopener noreferrer";
+            slide.append(anchor);
+          }
+        }catch {}
+      }
       return slide;
     });
     this.setSlides(nodes);
+  }
+  async loadItems(loader,{signal}={}) {
+    if(typeof loader!=="function")throw new TypeError("loadItems requires a function");
+    const data=await loader({galleryType:this.galleryType,maxItems:this.maxItems,signal});
+    if(signal?.aborted)return;
+    if(!Array.isArray(data))throw new TypeError("Gallery loader must return an array");
+    this.setItems(data);
+    return data;
   }
   pause() { this.paused = true; this.stop(); this.syncMedia(); }
   resume() { this.paused = false; this.start(); this.syncMedia(); }
