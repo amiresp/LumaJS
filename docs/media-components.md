@@ -73,4 +73,4 @@ await slider.loadItems(async ({galleryType,maxItems,signal}) =>
 );
 ```
 
-The `loadItems` callback is responsible for validating/normalizing API data to the generic slide array shape. Autoplay pause on hover/focus, reduced-motion handling, media cleanup and safe public URL checks are built in. Remaining parity gaps include native Swiper's swipe gestures, shadow DOM features and slide transition engine; add an optional Swiper adapter rather than making it mandatory in Core.
+The `loadItems` callback is responsible for validating/normalizing API data to the generic slide array shape. Autoplay pause on hover/focus, reduced-motion handling, media cleanup and safe public URL checks are built in. Pointer-based swipe is supported. Remaining parity gaps include native Swiper shadow DOM features, sophisticated slide transitions and original Swiper lifecycle/event details; add an optional Swiper adapter rather than making it mandatory in Core.
