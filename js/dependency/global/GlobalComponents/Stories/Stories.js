@@ -12,6 +12,7 @@ export class Stories {
     this.paused = false;
     this.muted = true;
     this.remaining = this.interval;
+    this.currentDuration = this.interval;
     this.startedAt = 0;
     this.timer = null;
     this.lastFocused = null;
@@ -69,6 +70,7 @@ export class Stories {
     const media = this.items[this.index]?.querySelector("video");
     this.remaining = Number(this.items[this.index]?.dataset.duration) || (media?.duration > 0 ? media.duration * 1000 : this.interval);
     this.updateProgress();
+    this.currentDuration = this.remaining;
     if (!this.paused) this.resume();
   }
   /**
@@ -132,8 +134,16 @@ export class Stories {
   updateProgress() {
     const progress = this.root.querySelector('[data-id="progress-bar"]');
     if (!progress) return;
-    const fraction = this.interval > 0 ? Math.min(1, Math.max(0, 1 - this.remaining / this.interval)) : 0;
+    const elapsed = this.paused || this.timer == null ? 0 : Date.now() - this.startedAt;
+    const fraction = this.currentDuration > 0 ?
+      Math.min(1, Math.max(0, 1 - (this.remaining - elapsed) / this.currentDuration)) : 0;
     progress.style.setProperty("--luma-progress", String(fraction));
+    progress.setAttribute("aria-valuenow", String(Math.round(fraction * 100)));
+    progress.setAttribute("aria-valuemin", "0");
+    progress.setAttribute("aria-valuemax", "100");
+    if (this.viewer && !this.viewer.hidden && !this.paused && typeof requestAnimationFrame === "function") {
+      this.progressFrame = requestAnimationFrame(() => this.updateProgress());
+    }
   }
   cancelProgress() {
     if (this.progressFrame != null && typeof cancelAnimationFrame === "function") cancelAnimationFrame(this.progressFrame);
@@ -155,7 +165,9 @@ export class Stories {
     if (video) { video.muted = this.muted; video.play()?.catch?.(() => {}); }
     if (typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     this.stop();
+    this.cancelProgress();
     this.timer = setTimeout(() => this.next(), this.remaining);
+    this.updateProgress();
   }
   togglePause() { if (this.paused) this.resume(); else this.pause(); }
   toggleMute() {
@@ -168,6 +180,7 @@ export class Stories {
   stop() { if (this.timer !== null) clearTimeout(this.timer); this.timer = null; }
   close() {
     this.stop();
+    this.cancelProgress();
     this.items[this.index]?.querySelector('video')?.pause();
     if (this.viewer) this.viewer.hidden = true;
     if (this.lastFocused?.isConnected) this.lastFocused.focus();
