@@ -9,8 +9,8 @@ test("offline service worker caches only allowlisted public files and falls back
   let networkUp = true;
   const response = { ok:true, type:"basic", headers:new Headers(), clone() { return this; } };
   const cache = {
-    async put(req, res) {store.set(req.url, res);},
-    async match(req) {return store.get(req.url);}
+    async put(req, res) {store.set(typeof req==="string"?req:req.url, res);},
+    async match(req) {return store.get(typeof req==="string"?req:req.url);}
   };
   const context = {
     URL, Headers,
