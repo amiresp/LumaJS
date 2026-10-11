@@ -78,10 +78,10 @@ test("Stories builds avatar buttons, immersive timeline, and restores page scrol
   try {
     const stories=new Stories(env.dom.window.document.querySelector('[data-id="root"]'));
     stories.setGalleries([{title:"Example",cover:"https://example.test/avatar.png",items:[{title:"one"},{title:"two"}]}]);
-    assert.equal(env.dom.window.document.querySelectorAll('[data-id="gallery-button"] .luma-story-avatar-photo img').length,1);
+    assert.equal(env.dom.window.document.querySelectorAll('[data-id="gallery-button"] [data-id="gallery-avatar"] img').length,1);
     stories.open();
     assert.equal(env.dom.window.document.body.style.overflow,"hidden");
-    assert.equal(env.dom.window.document.querySelectorAll(".luma-story-segment").length,2);
+    assert.equal(env.dom.window.document.querySelectorAll('[data-id="timeline-segment"]').length,2);
     stories.show(1);
     stories.close();
     assert.equal(env.dom.window.document.body.style.overflow,"");
