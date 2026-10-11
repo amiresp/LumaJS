@@ -9,8 +9,8 @@ test("architecture example mounts global, feature, option and page",async({page}
 });
 test("customSelect playground supports optional search fields",async({page})=>{
  await page.goto("/examples/custom-select/");
- await page.locator("#single [data-id='trigger']").click();
- await page.locator("#single [data-id='search']").fill("ink");
- await expect(page.locator("#single [data-id='option']")).toHaveCount(1);
- await expect(page.locator("#single [data-id='option']")).toContainText("Marker");
+ await page.locator("[data-id="single"] [data-id='trigger']").click();
+ await page.locator("[data-id="single"] [data-id='search']").fill("ink");
+ await expect(page.locator("[data-id="single"] [data-id='option']")).toHaveCount(1);
+ await expect(page.locator("[data-id="single"] [data-id='option']")).toContainText("Marker");
 });
