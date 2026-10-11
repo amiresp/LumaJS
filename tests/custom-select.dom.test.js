@@ -20,6 +20,6 @@ test("customSelect handles single/multi selection, attribute search and destroy"
   two.setValue(["one","two"]);assert.deepEqual(two.getValue(),["one","two"]);
   one.openDropdown();two.openDropdown();assert.equal(one.dropdown.hidden,true);
   one.destroy();one.destroy();two.destroy();
-  assert.equal(document.querySelectorAll(".luma-custom-select").length,0);
+  assert.equal(document.querySelectorAll('[data-id="root"]').length,0);
  }finally{restore();}
 });

@@ -12,9 +12,9 @@ test("Stories fills viewport, uses backdrop and segmented timeline", async ({pag
   expect(Math.abs(size.width-viewport.width)).toBeLessThan(2);
   expect(Math.abs(size.height-viewport.height)).toBeLessThan(2);
   await expect(viewer.locator('[data-id="backdrop"]')).toBeVisible();
-  await expect(viewer.locator(".luma-story-segment")).toHaveCount(2);
+  await expect(viewer.locator('[data-id="timeline-segment"]')).toHaveCount(2);
   await page.waitForTimeout(250);
-  const fill=await viewer.locator(".luma-story-segment-fill").first().evaluate(el=>Number(el.style.getPropertyValue("--luma-story-progress")));
+  const fill=await viewer.locator('[data-id="timeline-fill"]').first().evaluate(el=>Number(el.style.getPropertyValue("--luma-story-progress")));
   expect(fill).toBeGreaterThan(0);
   await viewer.locator('[data-id="close"]').click();
   await expect(viewer).toBeHidden();

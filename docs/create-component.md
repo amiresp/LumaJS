@@ -54,3 +54,8 @@ If `your-theme` has no Counter.html, the default HTML from **core-default** is l
 Do not inject API values via `innerHTML`: render untrusted data with `textContent`, validated attributes or safe DOM nodes. Components must be backend agnostic and tested in DOM and real browsers.
 
 For architecture examples see `examples/structure/`, `js/Features/Sample/`, `js/Option/Sample/`, `apps/website/pages/`, `js/dependency/global/GlobalApp.js` and `GlobalCaller.js`. Standalone customSelect uses `js/shared/widgets/customSelect/` instead of the themed global pattern.
+
+
+## Using shared Tabler icons
+
+For a control, import `createIconElement` from `../Icon/Icon.js` (adjust relative paths) and append the returned SVG. Give buttons their own `aria-label`, and keep the icon decorative unless a readable label is required. Avoid arbitrary SVG strings, external icon fonts and CDN calls. See `docs/icons.md`.

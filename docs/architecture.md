@@ -33,3 +33,10 @@ Controllers export `create(root,context)` returning `{destroy()}`. DOM contract:
 The Core stays neutral. Shared `GlobalApp` and `GlobalCaller` live in `js/dependency/global/`; per-domain Feature/Caller is demonstrated under `js/Features/Sample/`; independent Option/Caller under `js/Option/Sample/`; app-specific Pages and routes under `apps/website/pages/` and `routes.js`. See `examples/structure/` and `docs/structure-guide.md`.
 
 `customSelect` is a standalone widget with optional field search, not a themed GlobalComponent; see `docs/custom-select.md`. `offline.html` is the offline navigation fallback for an optionally installed Service Worker, not an automatically enabled offline mode.
+
+
+## Shared icon infrastructure
+
+`Icon` lives at `js/dependency/global/GlobalComponents/Icon/`. It exposes `createIconElement` and `renderIcon` for existing widgets and a standard lifecycle component `data-luma="Icon"`. The curated official Tabler MIT SVGs ship locally in small source packs. No runtime dependency, icon font or CDN is needed. The `core-default` HTML/CSS fallback applies to Icon like every GlobalComponent. See `docs/icons.md`.
+
+Behavioral DOM selectors use `data-id` exclusively; component hosts use `data-luma`. No class selectors, DOM ID selectors or `getElementById` should be used to bind UI behavior. `npm run check:hooks` enforces the rule on runtime, examples and tests.
