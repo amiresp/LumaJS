@@ -1,18 +1,22 @@
-# customSelect widget
+# customSelect (standalone widget)
 
-Migrated from the original `KaranehCustomSelect` widget to `js/shared/widgets/customSelect` without domain-specific options, global state or backend assumptions.
+Path: `js/shared/widgets/customSelect/customSelect.js` and optional stylesheet `customSelect.css`. This widget is **not** a globally themed Luma component; it owns its own DOM and is mounted explicitly.
 
-## API
+Use `/examples/custom-select/` for an interactive zero-build demo.
 
 ```js
-import {CustomSelect} from "./js/shared/widgets/customSelect/customSelect.js";
-const instance = new CustomSelect(document.querySelector('[data-id="category-select"]'), [
-  { value: "a", text: "First item", attr_subtext: "Optional note", attr_tokens: ["alternate", "keyword"] }
-]);
-instance.onChange(value => console.log(value));
-// instance.getValue(), instance.setValue(...), instance.clear(), instance.setOptions(...), instance.destroy()
+import {CustomSelect} from "/js/shared/widgets/customSelect/customSelect.js";
+const select = new CustomSelect(
+  document.getElementById("select"),
+  [{value:1,text:"Notebook",attr_subtext:"Paper",attr_tokens:["writing","notes"]}],
+  "Choose an item"
+);
+select.onChange((value) => console.log(value));
+select.setValue(1);
+console.log(select.getValue());
+select.destroy();
 ```
 
-Optional container attribute: `data-search-fields="text,attr_subtext,attr_tokens"`. Default search includes these three fields. All DOM behavior selectors created by the widget use `data-id`, while classes are visual-only. This standalone widget lives in `js/shared/widgets/` rather than Feature-specific code. Stylesheet is optional and may be overridden by the application.
+The container may specify `data-search-fields="text,attr_subtext,attr_tokens"`. Search is normalized (including common Persian character variations); optional `attr_subtext` and `attr_tokens` are searched only when supplied. Works with single and multi-select, `setOptions()`, `getSelectedItem()`, `clear()` and `excludeFrom`. Values and subtext use safe text DOM APIs; there are no hardcoded flight/city datasets.
 
-The adapter is not fully API-compatible with the legacy constructor's image/grouping and dropdown positioning implementation. These features require additional integration testing. Core remains independent of this widget.
+This is a reduced general-purpose implementation of the original `KaranehCustomSelect`, not feature-for-feature parity. Before using in a high-traffic accessible application, review grouping/image options, positioning, and complete keyboard/ARIA behavior.
