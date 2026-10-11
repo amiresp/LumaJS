@@ -6,6 +6,7 @@ export class Slider {
     this.autoplay = autoplay;
     this.paused = false;
     this.observer = null;
+    this.visibleVideos = new Set();
     this.loop = loop;
     this.index = 0;
     this.timer = null;
@@ -26,6 +27,16 @@ export class Slider {
       if (root.ownerDocument.hidden) this.stop(); else this.start();
       this.syncMedia();
     }, { signal });
+    if (typeof IntersectionObserver === "function") {
+      this.observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) this.visibleVideos.add(entry.target);
+          else this.visibleVideos.delete(entry.target);
+        });
+        this.syncMedia();
+      }, { threshold: 0.5 });
+      this.observeVideos();
+    }
     this.show(0);
     this.start();
   }
@@ -38,10 +49,18 @@ export class Slider {
     if (counter) counter.textContent = `${this.index + 1} / ${this.slides.length}`;
     this.root.dispatchEvent(new CustomEvent("slider:change", { detail: { index: this.index }, bubbles: true }));
   }
+  observeVideos() {
+    this.observer?.disconnect();
+    this.visibleVideos.clear();
+    if (this.observer) {
+      this.slides.flatMap(slide => [...slide.querySelectorAll("video")])
+        .forEach(video => this.observer.observe(video));
+    }
+  }
   syncMedia() {
     this.slides.forEach((slide, i) => {
       for (const video of slide.querySelectorAll("video")) {
-        if (i === this.index && !this.paused && !this.root.ownerDocument.hidden) {
+        if (i === this.index && !this.paused && !this.root.ownerDocument.hidden && (!this.observer || this.visibleVideos.has(video))) {
           video.muted = true;
           const playing = video.play();
           playing?.catch?.(() => {});
@@ -54,6 +73,7 @@ export class Slider {
     if (!host) throw new Error("Missing data-id=slides");
     host.replaceChildren(...nodes);
     this.slides = [...host.querySelectorAll('[data-id="slide"]')];
+    this.observeVideos();
     this.show(0);
   }
   /**
