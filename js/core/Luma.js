@@ -1,3 +1,4 @@
+import { ThemeResolver } from "../shared/ThemeResolver.js";
 /**
  * LumaJS browser runtime — zero production dependencies.
  * Template HTML is trusted, same-origin application code. Never interpolate user data into it.
@@ -6,7 +7,8 @@ export class Luma {
   constructor({ base = "/", theme = "core-default", fallback = "core-default", onError = console.error } = {}) {
     this.base = base.endsWith("/") ? base : base + "/";
     this.theme = theme;
-    this.fallback = fallback;
+    this.fallback = "core-default";
+    this.themeResolver = new ThemeResolver({ base: this.base, themes: [theme, fallback, "core-default"] });
     this.onError = onError;
     this.registry = new Map();
     this.instances = new Map();
@@ -27,14 +29,11 @@ export class Luma {
     return response.text();
   }
   async template(name) {
-    for (const theme of new Set([this.theme, this.fallback])) {
-      try { return await this.text(`themes/${theme}/dependency/Global/${name}/${name}.html`); }
-      catch (error) { if (theme === this.fallback) throw error; }
-    }
+    return (await this.themeResolver.resolve(name, "html")).content;
   }
   async style(name) {
     // Missing CSS is not a fatal component failure.
-    for (const theme of new Set([this.theme, this.fallback])) {
+    for (const theme of this.themeResolver.themes) {
       const href = new URL(`themes/${theme}/dependency/Global/${name}/${name}.css`, new URL(this.base, location.href)).href;
       if (document.querySelector(`link[data-luma-style="${name}:${theme}"]`)) return;
       try {
@@ -94,8 +93,8 @@ export class Luma {
   }
   fail(host, error) {
     host.dataset.loadState = "error";
-    this.onError(error, host);
-    host.dispatchEvent(new CustomEvent("luma:error", { detail: { error }, bubbles: true }));
+    try { this.onError(error, host); } catch (reportError) { console.error("Luma error reporter failed", reportError); }
+    try { host.dispatchEvent(new CustomEvent("luma:error", { detail: { error }, bubbles: true })); } catch (eventError) { console.error("Luma error event failed", eventError); }
   }
   async hydrate(scope = document) {
     const candidates = [ ...(scope.matches?.("[data-luma]") ? [scope] : []), ...scope.querySelectorAll("[data-luma]") ];
@@ -110,13 +109,16 @@ export class Luma {
     const affected = new Set([...this.instances.keys(), ...this.inFlight.keys()].filter(inside));
     for (const host of affected) this.revisions.set(host, (this.revisions.get(host) || 0) + 1);
     const pending = [...this.inFlight.entries()].filter(([host]) => affected.has(host)).map(([, task]) => task);
-    const entries = [...this.instances].filter(([host]) => affected.has(host));
-    await Promise.allSettled(entries.map(async ([host, instance]) => {
+    const entries = [...this.instances].filter(([host]) => affected.has(host)).sort(([a],[b]) => {
+      const depth = node => { let count = 0; while (node?.parentElement) { count++; node = node.parentElement; } return count; };
+      return depth(b) - depth(a);
+    });
+    for (const [host, instance] of entries) {
       this.instances.delete(host);
       try { await instance.destroy(); }
-      catch (error) { this.onError(error, host); }
+      catch (error) { try { this.onError(error, host); } catch (reportError) { console.error(reportError); } }
       delete host.dataset.loadState;
-    }));
+    }
     await Promise.allSettled(pending);
   }
   async restart(scope = document) {
