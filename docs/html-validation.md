@@ -1,15 +1,5 @@
-# Project-wide HTML validation
+# Project-wide HTML hygiene checks
 
-Run `python3 tools/validate_html.py .` from the repository root. This is **development-time verification**, not a frontend dependency. No `pip install`, npm, Node.js or build tooling is required.
+Run `npm run check` locally. This runs `npm run validate:html` and `npm test` using Node.js built-in capabilities. **No npm install is required** for the current test suite: package.json has no dependencies. Node is for development/CI only, not the browser runtime.
 
-The CI workflow runs it automatically for pull requests. It scans all `*.html` files (except vendor/build directories) for:
-- accidental literal `\\n` in rendered text or attributes (as opposed to actual line breaks);
-- suspicious standalone `/n`;
-- unmatched and unclosed tags, including void-element closing tags;
-- invalid UTF-8 or parser errors.
-
-Inline script/style/code/pre/textarea bodies are excluded from text-escape checks so valid JavaScript escape sequences are not rejected. Attribute values remain checked.
-
-This validator intentionally is **not** a complete HTML5 conformance checker. HTMLParser cannot model all browser implicit-closing rules, so complex standards validation can be added as an optional developer tool later. Report false positives before changing enforcement rules. To allow intentional literal escapes in visible text, use a reviewed markup exception mechanism (not yet implemented) rather than silently bypassing CI.
-
-Developers and AI agents should run this checker on all pages before opening a PR.
+The checker scans HTML files, detects accidental literal `\\n` and suspicious `/n` sequences. This is a **hygiene check, not a complete HTML5 syntax parser**. Full HTML structure validation must be added separately before a stable release. Inline JavaScript escapes should remain valid. See `tools/validate-html.js` and tests.
