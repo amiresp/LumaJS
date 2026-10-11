@@ -153,3 +153,21 @@ The three components use safe text-only APIs, default `data-id` selectors and cl
 See [AGENTS.md](AGENTS.md), [architecture](docs/architecture.md), [media components](docs/media-components.md), [routing](docs/routing.md), and [security](docs/security.md).
 
 Current integration is alpha: it needs further accessibility, network and real-user browser validation before a production claim. Open-source license selection is pending.
+
+
+## More runnable examples and authoring conventions
+
+The project now preserves and demonstrates the original `wwwroot.zip` separation between **GlobalApp / GlobalCaller**, **Feature / Caller**, **Option / Caller**, and app-owned **Pages** without copying business-specific endpoints or framework globals.
+
+Run `npm run playground`, then open:
+
+- **Architecture demo:** http://127.0.0.1:8765/examples/structure/ (shared GlobalApp, Feature, Option, Home/Sample Page)
+- **customSelect demo:** http://127.0.0.1:8765/examples/custom-select/ (searching optional attributes, single and multi-select)
+- **Components demo:** http://127.0.0.1:8765/examples/basic/
+- **Offline fallback:** `/offline.html` (the opt-in Service Worker precaches it and serves it for offline navigations, when previously installed online)
+
+For an end-to-end tutorial to **create a component**, read [Creating a Component](docs/create-component.md). For app structure and the original ZIP mapping, see [Structure Guide](docs/structure-guide.md). For the complete `customSelect` API and remaining parity limitations, see [customSelect](docs/custom-select.md). For caching and navigation offline behavior see [Offline](docs/offline.md).
+
+### Documentation policy
+
+Every source/API change must update README, AGENTS and its relevant documentation together. The PR check enforces an accompanying documentation change; contributors still must check accuracy themselves. See [Maintenance](docs/maintenance.md).
