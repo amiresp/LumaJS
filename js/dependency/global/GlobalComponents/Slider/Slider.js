@@ -4,6 +4,8 @@ export class Slider {
     this.root = root;
     this.interval = interval;
     this.autoplay = autoplay;
+    this.paused = false;
+    this.observer = null;
     this.loop = loop;
     this.index = 0;
     this.timer = null;
@@ -20,6 +22,10 @@ export class Slider {
     root.addEventListener("mouseleave", () => this.start(), { signal });
     root.addEventListener("focusin", () => this.stop(), { signal });
     root.addEventListener("focusout", event => { if (!root.contains(event.relatedTarget)) this.start(); }, { signal });
+    root.ownerDocument.addEventListener("visibilitychange", () => {
+      if (root.ownerDocument.hidden) this.stop(); else this.start();
+      this.syncMedia();
+    }, { signal });
     this.show(0);
     this.start();
   }
@@ -27,18 +33,39 @@ export class Slider {
     if (!this.slides.length) return;
     this.index = this.loop ? (index % this.slides.length + this.slides.length) % this.slides.length : Math.max(0, Math.min(index, this.slides.length - 1));
     this.slides.forEach((slide, i) => { slide.hidden = i !== this.index; slide.setAttribute("aria-hidden", String(i !== this.index)); });
+    this.syncMedia();
     const counter = this.root.querySelector('[data-id="counter"]');
     if (counter) counter.textContent = `${this.index + 1} / ${this.slides.length}`;
     this.root.dispatchEvent(new CustomEvent("slider:change", { detail: { index: this.index }, bubbles: true }));
   }
+  syncMedia() {
+    this.slides.forEach((slide, i) => {
+      for (const video of slide.querySelectorAll("video")) {
+        if (i === this.index && !this.paused && !this.root.ownerDocument.hidden) {
+          video.muted = true;
+          const playing = video.play();
+          playing?.catch?.(() => {});
+        } else video.pause();
+      }
+    });
+  }
+  setSlides(nodes) {
+    const host = this.root.querySelector('[data-id="slides"]');
+    if (!host) throw new Error("Missing data-id=slides");
+    host.replaceChildren(...nodes);
+    this.slides = [...host.querySelectorAll('[data-id="slide"]')];
+    this.show(0);
+  }
+  pause() { this.paused = true; this.stop(); this.syncMedia(); }
+  resume() { this.paused = false; this.start(); this.syncMedia(); }
   next() { this.show(this.index + 1); }
   previous() { this.show(this.index - 1); }
   start() {
     this.stop();
-    if (!this.autoplay || this.slides.length < 2 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (this.paused || !this.autoplay || this.slides.length < 2 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     this.timer = setInterval(() => this.next(), this.interval);
   }
   stop() { if (this.timer !== null) clearInterval(this.timer); this.timer = null; }
-  destroy() { this.stop(); this.controller.abort(); }
+  destroy() { this.pause(); this.controller.abort(); this.observer?.disconnect(); }
 }
 export function create(root) { return new Slider(root, { autoplay: true }); }
