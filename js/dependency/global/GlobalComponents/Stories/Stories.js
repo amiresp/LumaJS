@@ -159,7 +159,7 @@ export class Stories {
       button.setAttribute("aria-label", "Open "+gallery.title);
       button.setAttribute("aria-current",String(i===this.galleryIndex));
       const ring=doc.createElement("span");ring.className="luma-story-avatar-ring";
-      const photo=doc.createElement("span");photo.className="luma-story-avatar-photo";
+      const photo=doc.createElement("span");photo.className="luma-story-avatar-photo";photo.dataset.id="gallery-avatar";
       const raw=gallery.cover||gallery.avatar||gallery.items.find(x=>x.type==="image")?.src;
       try {if(raw){const url=new URL(String(raw),doc.baseURI);if(["http:","https:"].includes(url.protocol)){const img=doc.createElement("img");img.src=url.href;img.alt="";photo.append(img);}}}catch{}
       if(!photo.childNodes.length)photo.textContent=gallery.title.slice(0,1)||"✦";
@@ -173,8 +173,8 @@ export class Stories {
     if(!host)return;
     host.replaceChildren();
     for(let i=0;i<this.items.length;i++){
-      const segment=this.root.ownerDocument.createElement("span");segment.className="luma-story-segment";
-      const fill=this.root.ownerDocument.createElement("span");fill.className="luma-story-segment-fill";
+      const segment=this.root.ownerDocument.createElement("span");segment.className="luma-story-segment";segment.dataset.id="timeline-segment";
+      const fill=this.root.ownerDocument.createElement("span");fill.className="luma-story-segment-fill";fill.dataset.id="timeline-fill";
       fill.style.setProperty("--luma-story-progress",String(i<this.index?1:0));
       segment.append(fill);host.append(segment);
     }
@@ -183,7 +183,7 @@ export class Stories {
   previousGallery() { if (this.galleryIndex > 0) this.setGallery(this.galleryIndex - 1); }
   updateProgress() {
     const progress = this.root.querySelector('[data-id="progress-bar"]');
-    const fills=[...this.root.querySelectorAll('.luma-story-segment-fill')];
+    const fills=[...this.root.querySelectorAll('[data-id="timeline-fill"]')];
     if(!progress && !fills.length)return;
     const elapsed = this.paused || this.timer == null ? 0 : Date.now() - this.startedAt;
     const fraction = this.currentDuration > 0 ?
