@@ -27,8 +27,6 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
   if (!url.pathname.startsWith(ROOT.pathname)) return;
-  if (!ALLOWED.test(url.pathname) || !PUBLIC_DIR.test(url.pathname)) return;
-  if (url.pathname.endsWith(".html") && !url.pathname.startsWith("/themes/")) return;
   if (url.pathname.includes("/api/") || request.headers.has("authorization")) return;
   if (request.mode === "navigate") {
     event.respondWith((async () => {
@@ -40,6 +38,8 @@ self.addEventListener("fetch", event => {
     })());
     return;
   }
+  if (!ALLOWED.test(url.pathname) || !PUBLIC_DIR.test(url.pathname)) return;
+  if (url.pathname.endsWith(".html") && !url.pathname.startsWith("/themes/")) return;
   event.respondWith((async () => {
     const cache = await caches.open(VERSION);
     try {
