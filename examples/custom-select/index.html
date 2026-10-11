@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LumaJS customSelect playground</title><link rel="stylesheet" href="../../js/shared/widgets/customSelect/customSelect.css"><style>body{font:16px system-ui;max-width:640px;padding:2rem;margin:auto}main{display:grid;gap:2rem}</style></head><body>
+<h1>customSelect</h1><p>Searches text and optional attr_subtext / attr_tokens without domain data.</p>
+<main><section><h2>Single select</h2><div id="single" data-search-fields="text,attr_subtext,attr_tokens"></div></section><section><h2>Multi select</h2><div id="multi" data-search-fields="text,attr_tokens"></div></section><output id="selected" aria-live="polite"></output></main>
+<script type="module">
+import {CustomSelect} from "../../js/shared/widgets/customSelect/customSelect.js";
+const items=[{value:"a",text:"Notebook",attr_subtext:"Paper",attr_tokens:["notes","writing"]},{value:"b",text:"Marker",attr_subtext:"Pen",attr_tokens:["ink","drawing"]},{value:"c",text:"Folder",attr_tokens:["organize"]}];
+const single=new CustomSelect(document.getElementById("single"),items,"Choose an item");
+const multi=new CustomSelect(document.getElementById("multi"),items,"Choose items","",true);
+function render(){document.getElementById("selected").textContent=JSON.stringify({single:single.getValue(),multi:multi.getValue()});}
+single.onChange(render);multi.onChange(render);render();
+window.addEventListener("pagehide",()=>{single.destroy();multi.destroy();},{once:true});
+</script></body></html>
