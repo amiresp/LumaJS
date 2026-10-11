@@ -16,3 +16,6 @@ Applies to human and AI contributors throughout this repository.
 12. Before changing Core, add regression tests for existing lifecycle and navigation behavior.
 
 Review and verify these rules in CI; prose rules alone are not a security boundary.
+
+13. **No business routes in Core.** Route definitions belong in an application routing manifest (`apps/<app>/routes.js`) or an optional Feature-exported manifest. Core may only supply generic routing machinery.
+14. **HTML validation is mandatory.** Before proposing changes, run `python3 tools/validate_html.py .` and the unit tests. Never emit literal `\\n` or accidental `/n` in HTML markup/text; use real newlines. See `docs/html-validation.md`.
