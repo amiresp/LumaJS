@@ -1,3 +1,4 @@
+import {renderIcon} from "../Icon/Icon.js";
 /** Slider: selectors are data-id hooks, never class or id. */
 export class Slider {
   constructor(root, { interval = 5000, autoplay = false, loop = true } = {}) {
@@ -27,6 +28,7 @@ export class Slider {
     this.controller = new AbortController();
     this.slides = [...root.querySelectorAll('[data-id="slide"]')];
     const signal = this.controller.signal;
+    for(const [id,name] of [["next","chevron-right"],["previous","chevron-left"]]){const button=root.querySelector('[data-id="'+id+'"]');if(button){button.setAttribute("aria-label",id==="next"?"Next slide":"Previous slide");renderIcon(button,name,{size:21});}}
     root.querySelector('[data-id="next"]')?.addEventListener("click", () => this.interact("next"), { signal });
     root.querySelector('[data-id="pagination"]')?.addEventListener("click", event => {
       const button=event.target.closest('[data-id="page"]');
