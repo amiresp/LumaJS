@@ -1,3 +1,4 @@
+import {createIconElement} from "../Icon/Icon.js";
 /** Focus-managed modal confirmation dialog; no HTML injection. */
 export class Dialog {
   constructor(root){
@@ -8,6 +9,7 @@ export class Dialog {
     this.confirm=root.querySelector('[data-id="confirm"]');
     this.cancel=root.querySelector('[data-id="cancel"]');
     this.closeButton=root.querySelector('[data-id="close"]');
+    if(this.closeButton)this.closeButton.replaceChildren(createIconElement("x",{documentRef:root.ownerDocument,size:20}));
     this.controller=new (root.ownerDocument.defaultView?.AbortController||AbortController)();
     this.pending=null;this.previousFocus=null;this.destroyed=false;
     const signal=this.controller.signal;
