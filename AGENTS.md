@@ -32,3 +32,5 @@ Review and verify these rules in CI; prose rules alone are not a security bounda
 
 22. **Icons use local official Tabler SVGs:** render through `js/dependency/global/GlobalComponents/Icon/Icon.js` and approved SVG packs. Do not introduce emoji/icon fonts/CDN dependencies into shared controls. Keep third_party/tabler-icons-LICENSE and docs/icons.md current; only import SVGs from the official Tabler repository. Public icon names must have DOM tests and the gallery must include them.
 23. **After modifying icons or their consumers:** update README.md, AGENTS.md, docs/architecture.md, docs/migration-status.md, docs/icons.md and related component docs in the same PR; run npm run check and browser tests.
+
+24. **Strict DOM hook selector policy:** Runtime/component behavior, browser examples, tests and copied README snippets MUST locate UI elements via `[data-id="..."]` (component hosts via `[data-luma="..."]`). Do not use ID or class selectors for behavioral binding. Classes are presentation-only. Internal SVG XML validation and semantic native-element queries are exempt. Run the DOM selector audit in CI.
