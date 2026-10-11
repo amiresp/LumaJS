@@ -10,7 +10,7 @@ The original `wwwroot.zip` is the architecture reference. This PR now uses the o
 - `themes/core-default/dependency/Global/Stories/{Stories.html,Stories.css}`.
 
 ## Required next-stage compatibility work (not implemented)
-- Port or adapt the actual `BootLoader.js`, `ThemeLoader.js`, `ComponentRegistry.js`, `LibraryManager.js`, `BindEngine.js`, `ClientCache.js`, and supporting APIs.
+- Port or adapt the actual `BootLoader.js`, `ThemeLoader.js`, `ComponentRegistry.js`, `LibraryManager.js`, `ClientCache.js`, and supporting APIs.
 - Preserve existing Feature / Option / Caller / Page directory and runtime contracts.
 - Port full Slider and Stories behavior: Swiper adapter, remote data/caller bindings, cache, i18n, image/video lifecycles, progress, pause/resume, multiple story groups, async navigation guards.
 - Standardize multi-application isolation for admin/seller/customer/public environments and theme fallback.
