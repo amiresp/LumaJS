@@ -22,3 +22,5 @@ Review and verify these rules in CI; prose rules alone are not a security bounda
 
 15. **Mandatory HTML fallback:** Whenever a component HTML template is absent or unavailable in the active theme, resolve it from `themes/core-default/dependency/Global/<Component>/<Component>.html`. `core-default` is a permanent architectural fallback; never remove, disable, or require application authors to duplicate its templates. Theme overrides contain HTML/CSS only and maintain the component's `data-id` contract.
 16. **Lifecycle isolation:** Dispose child components before parents, isolate error-reporting callbacks, and use bounded network/library load times. Include regression tests for fallback, pending mounts, restart, and nested cleanup.
+
+17. Core HTML fallback must be covered by tests; never use user/API content as HTML. Keep Network Retry bounded and only automatic for idempotent methods. Run npm run check and npm run test:browser when changing components or theme handling.
