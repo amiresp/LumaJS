@@ -39,3 +39,5 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Replaced text glyph controls in Toast, Alert, Dialog, Slider and Stories with local Tabler icons.
 - Added searchable zero-build gallery `examples/icons/` and unit tests for SVG parsing, name coverage, lifecycle and accessible labels.
 - Not all 5000+ upstream Tabler icons are included; this is a deliberately curated general-purpose set.
+
+- Enforced data-id-only behavioral selectors across runtime, examples and tests, migrated earlier ID-driven playgrounds, and added `npm run check:hooks` CI guard.
