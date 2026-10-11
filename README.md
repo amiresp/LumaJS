@@ -171,3 +171,16 @@ For an end-to-end tutorial to **create a component**, read [Creating a Component
 ### Documentation policy
 
 Every source/API change must update README, AGENTS and its relevant documentation together. The PR check enforces an accompanying documentation change; contributors still must check accuracy themselves. See [Maintenance](docs/maintenance.md).
+
+
+## Tabler SVG Icon component
+
+LumaJS includes a curated local collection of **120+ official Tabler outline SVG icons** under the upstream MIT license (see `third_party/tabler-icons-LICENSE`). It needs no icon font, external CDN or browser build. Try the searchable [Icon Gallery](examples/icons/) at **http://127.0.0.1:8765/examples/icons/** after `npm run playground`.
+
+```js
+import {createIconElement,renderIcon} from "./js/dependency/global/GlobalComponents/Icon/Icon.js";
+button.prepend(createIconElement("arrow-left", {size:20,label:"Go back"}));
+renderIcon(document.querySelector("#status-icon"), "circle-check", {size:20});
+```
+
+Icon is also a standard Luma component with `data-luma="Icon"`, a `core-default` template, `set(name)` and `destroy()`. Toast, Alert, Dialog, Stories and Slider controls now use the locally bundled Tabler icons. See [Icon Reference](docs/icons.md). Keep the original Tabler MIT copyright notice with redistributions.
