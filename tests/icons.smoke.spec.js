@@ -1,11 +1,11 @@
 import {test,expect} from "@playwright/test";
 test("local Tabler gallery renders and filters SVG names", async ({page})=>{
  await page.goto("/examples/icons/");
- await expect(page.locator("[data-id="icons"] svg").first()).toBeVisible();
- await page.locator("[data-id="search"]").fill("arrow-");
- await expect(page.locator("[data-id="count"]")).toContainText("icons");
- await expect(page.locator('[data-id="icons"] .tile')).not.toHaveCount(0);
- await expect(page.locator('[data-id="icons"] .tile').first().locator("svg")).toHaveAttribute("aria-hidden","true");
+ await expect(page.locator('[data-id="icons"] svg').first()).toBeVisible();
+ await page.locator('[data-id="search"]').fill("arrow-");
+ await expect(page.locator('[data-id="count"]')).toContainText("icons");
+ await expect(page.locator('[data-id="icons"] [data-id="icon-tile"]')).not.toHaveCount(0);
+ await expect(page.locator('[data-id="icons"] [data-id="icon-tile"]').first().locator("svg")).toHaveAttribute("aria-hidden","true");
 });
 test("feedback controls and slider use local SVG icons", async ({page})=>{
  await page.goto("/examples/basic/");
