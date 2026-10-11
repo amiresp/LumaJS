@@ -2,12 +2,17 @@
  * Must never cache API, personalized responses or cross-origin content.
  * Set LUMA_STATIC_VERSION in a new release to invalidate old entries.
  */
-const VERSION = "luma-static-v1";
+const VERSION = "luma-static-v2";
+const OFFLINE_PAGE = new URL("offline.html", self.registration.scope);
 const ROOT = new URL(self.registration.scope);
 const ALLOWED = /\.(?:js|css|html|png|jpg|jpeg|webp|svg|gif|woff2?)$/i;
 const PUBLIC_DIR = /^\/(?:js\/|themes\/|assets\/|images\/|css\/)/i;
 self.addEventListener("install", event => {
-  event.waitUntil(self.skipWaiting());
+  event.waitUntil((async () => {
+    const cache = await caches.open(VERSION);
+    try { const response = await fetch(OFFLINE_PAGE); if(response.ok && !response.headers.has("set-cookie")) await cache.put(OFFLINE_PAGE.href, response); } catch {}
+    await self.skipWaiting();
+  })());
 });
 self.addEventListener("activate", event => {
   event.waitUntil((async () => {
@@ -25,7 +30,16 @@ self.addEventListener("fetch", event => {
   if (!ALLOWED.test(url.pathname) || !PUBLIC_DIR.test(url.pathname)) return;
   if (url.pathname.endsWith(".html") && !url.pathname.startsWith("/themes/")) return;
   if (url.pathname.includes("/api/") || request.headers.has("authorization")) return;
-  if (request.mode === "navigate") return;
+  if (request.mode === "navigate") {
+    event.respondWith((async () => {
+      try { return await fetch(request); } catch (error) {
+        const fallback = await (await caches.open(VERSION)).match(OFFLINE_PAGE.href);
+        if (fallback) return fallback;
+        throw error;
+      }
+    })());
+    return;
+  }
   event.respondWith((async () => {
     const cache = await caches.open(VERSION);
     try {
