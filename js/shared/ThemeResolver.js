@@ -3,9 +3,9 @@
  * Compatible with wwwroot/dependency/Global/ directory conventions.
  */
 export class ThemeResolver {
-  constructor({ base = "/", themes = ["core-default"], fetcher = fetch } = {}) {
+  constructor({ base = "/", themes = ["core-default"], fetcher = globalThis.fetch?.bind(globalThis) } = {}) {
     this.base = base.endsWith("/") ? base : base + "/";
-    this.themes = [...new Set(themes)];
+    this.themes = [...new Set([...themes.filter(t => t !== "core-default"), "core-default"])];
     this.fetcher = fetcher;
     this.cache = new Map();
   }
