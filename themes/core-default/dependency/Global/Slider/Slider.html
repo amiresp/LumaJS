@@ -1,6 +1,9 @@
-<section data-id="root" class="luma-slider" aria-roledescription="carousel" aria-label="Featured slides" tabindex="0">
-  <div data-id="slide" class="luma-slide"><h2>No build required</h2><p>Run LumaJS directly in a modern browser.</p></div>
-  <div data-id="slide" class="luma-slide" hidden><h2>Backend agnostic</h2><p>Node.js, PHP, ASP.NET, or any HTTP server.</p></div>
-  <div data-id="slide" class="luma-slide" hidden><h2>Themeable</h2><p>Swap HTML and CSS, keep data-id hooks.</p></div>
-  <nav aria-label="Slider controls"><button type="button" data-id="previous">Previous</button><span data-id="counter" aria-live="polite"></span><button type="button" data-id="next">Next</button></nav>
+<section data-id="root" class="luma-slider" aria-roledescription="carousel" aria-label="Featured slides" tabindex="0" data-autoplay-delay="6000" data-speed="650" data-loop="true" data-pagination="true" data-navigation="true">
+  <div data-id="slides" class="luma-slider-track">
+    <div data-id="slide" class="luma-slide"><h2>No build required</h2><p>Run LumaJS directly in a modern browser.</p></div>
+    <div data-id="slide" class="luma-slide" hidden><h2>Backend agnostic</h2><p>Node.js, PHP, ASP.NET, or any HTTP server.</p></div>
+    <div data-id="slide" class="luma-slide" hidden><h2>Themeable</h2><p>Swap HTML and CSS, keep data-id hooks.</p></div>
+  </div>
+  <nav data-id="controls" aria-label="Slider controls"><button type="button" data-id="previous">Previous</button><span data-id="counter" aria-live="polite"></span><button type="button" data-id="next">Next</button></nav>
+  <div data-id="pagination" class="luma-slider-pagination" aria-label="Choose slide"></div>
 </section>
