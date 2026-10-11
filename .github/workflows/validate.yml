@@ -1,0 +1,14 @@
+name: Validate LumaJS
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate HTML (Python standard library only)
+        run: python3 tools/validate_html.py .
+      - name: Test validator rules
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
