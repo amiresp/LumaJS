@@ -42,3 +42,33 @@ test("Stories exposes pause/mute and closes without leaving timers", () => {
     stories.destroy();stories.destroy();
   }finally{env.restore();}
 });
+
+test("neutral media APIs construct DOM text safely with no injected HTML",()=>{
+  const env=domEnvironment('<div data-id="root"><div data-id="slides"></div><span data-id="counter"></span></div>');
+  try {
+    const root=document.querySelector('[data-id="root"]');
+    const slider=new Slider(root,{autoplay:false});
+    slider.setItems([{title:"<img src=x onerror=alert(1)>",text:"safe",type:"image",src:"javascript:alert(1)"}]);
+    assert.equal(root.querySelectorAll("img").length,1);
+    assert.equal(root.querySelector("img").getAttribute("src"),null);
+    assert.equal(root.querySelector("h2").textContent,"<img src=x onerror=alert(1)>");
+    slider.destroy();
+  }finally{env.restore();}
+});
+test("Stories render gallery media and titles safely",()=>{
+  const env=domEnvironment('<div data-id="root"><div data-id="gallery-list"></div><button data-id="open"></button><div data-id="viewer" hidden><span data-id="progress"></span><div data-id="story-items"></div><button data-id="close"></button></div></div>');
+  try {
+    const root=document.querySelector('[data-id="root"]');
+    const stories=new Stories(root);
+    stories.setGalleries([
+      {title:"First",items:[{type:"image",src:"https://example.com/x.png",title:"<script>alert(1)</script>"}]},
+      {title:"Second",items:[{type:"video",src:"https://example.com/x.mp4",title:"Video"}]}
+    ]);
+    assert.equal(root.querySelectorAll('[data-id="gallery-button"]').length,2);
+    assert.equal(root.querySelectorAll("script").length,0);
+    assert.equal(root.querySelector('[data-id="story-item"] p').textContent,"<script>alert(1)</script>");
+    stories.setGallery(1);
+    assert.equal(root.querySelectorAll('[data-id="story-item"] video').length,1);
+    stories.destroy();
+  }finally{env.restore();}
+});
