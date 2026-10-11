@@ -30,3 +30,12 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Documented customSelect optional `attr_subtext` / `attr_tokens` searching and remaining advanced widget parity gaps.
 - Added offline navigation fallback `offline.html` via opt-in Service Worker; no private API caching.
 - Introduced documentation synchronization policy, CI documentation gate and contributor guide.
+
+
+## Shared UI icon pass
+
+- Added curated official Tabler outline icons under MIT, licensed in `third_party/tabler-icons-LICENSE`.
+- New reusable `Icon` component and standalone `createIconElement` / `renderIcon` APIs.
+- Replaced text glyph controls in Toast, Alert, Dialog, Slider and Stories with local Tabler icons.
+- Added searchable zero-build gallery `examples/icons/` and unit tests for SVG parsing, name coverage, lifecycle and accessible labels.
+- Not all 5000+ upstream Tabler icons are included; this is a deliberately curated general-purpose set.
