@@ -20,6 +20,12 @@ export class Stories {
     for (const [id, action] of [["open", () => this.open()], ["close", () => this.close()], ["next", () => this.next()], ["previous", () => this.previous()], ["pause", () => this.togglePause()], ["mute", () => this.toggleMute()]]) {
       root.querySelector(`[data-id="${id}"]`)?.addEventListener("click", action, { signal });
     }
+    root.querySelector('[data-id="gallery-list"]')?.addEventListener("click", event => {
+      const button = event.target.closest('[data-id="gallery-button"]');
+      if (!button) return;
+      const index = Number(button.dataset.galleryIndex);
+      if (Number.isInteger(index)) { this.setGallery(index); this.open(); }
+    }, { signal });
     root.addEventListener("keydown", event => {
       if (this.viewer?.hidden !== false) return;
       if (event.key === "Escape") this.close();
@@ -77,12 +83,26 @@ export class Stories {
       items: Array.isArray(gallery.items) ? gallery.items : []
     }));
     this.galleryIndex = 0;
+    const picker = this.root.querySelector('[data-id="gallery-list"]');
+    if (picker) {
+      picker.replaceChildren();
+      this.galleries.forEach((gallery,index) => {
+        const button = this.root.ownerDocument.createElement("button");
+        button.type = "button"; button.dataset.id = "gallery-button";
+        button.dataset.galleryIndex = String(index);
+        button.textContent = gallery.title || String(index + 1);
+        picker.append(button);
+      });
+    }
     this.setGallery(0);
   }
   setGallery(index) {
     const gallery = this.galleries[index];
     if (!gallery) return;
     this.galleryIndex = index;
+    this.root.querySelectorAll('[data-id="gallery-button"]').forEach(button => {
+      button.setAttribute("aria-current", String(Number(button.dataset.galleryIndex) === index));
+    });
     const container = this.root.querySelector('[data-id="story-items"]') || this.viewer;
     for (const item of [...container.querySelectorAll('[data-id="story-item"]')]) item.remove();
     const doc = this.root.ownerDocument;
