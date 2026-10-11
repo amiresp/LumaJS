@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LumaJS | Basic demo</title><style>body{font:16px system-ui;margin:32px auto;max-width:800px;padding:0 16px}main{display:grid;gap:24px}</style></head>
+<body>
+  <h1>LumaJS — zero-build demo</h1>
+  <p>Component behavior is JavaScript; themes provide HTML and CSS.</p>
+  <main><div data-luma="Slider"></div><div data-luma="Story"></div></main>
+  <script type="module">
+    import { Luma } from "../../core/Luma.js";
+    const runtime = new Luma({ base: "../../" });
+    runtime.register("Slider", { load: () => import("../../components/Slider/Slider.js") });
+    runtime.register("Story", { load: () => import("../../components/Story/Story.js") });
+    await runtime.hydrate();
+    window.addEventListener("pagehide", () => { void runtime.destroy(); }, { once: true });
+  </script>
+</body></html>
