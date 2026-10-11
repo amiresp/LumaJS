@@ -17,7 +17,8 @@ export class LibraryManager {
     if (this.loaded.has(key)) return true;
     if (this.pending.has(key)) return this.pending.get(key);
     const promise = new Promise((resolve, reject) => {
-      const parsed = new URL(url, this.document.baseURI);
+      const base = /^https?:/i.test(this.document.baseURI) ? this.document.baseURI : "https://localhost/";
+      const parsed = new URL(url, base);
       if (!["http:", "https:"].includes(parsed.protocol)) { reject(new Error("Invalid library URL protocol")); return; }
       let complete = false;
       let timer;
