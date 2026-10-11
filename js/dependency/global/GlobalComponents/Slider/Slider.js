@@ -56,6 +56,34 @@ export class Slider {
     this.slides = [...host.querySelectorAll('[data-id="slide"]')];
     this.show(0);
   }
+  /**
+   * Data-driven slides; no backend-specific response shape.
+   * { title, text, src, alt, type:'image'|'video', link }
+   */
+  setItems(items = []) {
+    const doc = this.root.ownerDocument;
+    if (!Array.isArray(items)) throw new TypeError("Slider items must be an array");
+    const nodes = items.map(item => {
+      const slide = doc.createElement("section");
+      slide.dataset.id = "slide";
+      if (item.type === "image" || item.type === "video") {
+        const media = doc.createElement(item.type === "video" ? "video" : "img");
+        const src = String(item.src ?? "");
+        try {
+          const url = new URL(src, doc.baseURI);
+          if (["http:", "https:"].includes(url.protocol)) media.src = url.href;
+        } catch { /* Skip invalid media URL. */ }
+        media.setAttribute("aria-label", String(item.alt ?? ""));
+        if (media.tagName === "VIDEO") { media.muted = true; media.playsInline = true; media.preload = "metadata"; }
+        slide.append(media);
+      }
+      const title = doc.createElement("h2"); title.textContent = String(item.title ?? "");
+      const paragraph = doc.createElement("p"); paragraph.textContent = String(item.text ?? "");
+      slide.append(title, paragraph);
+      return slide;
+    });
+    this.setSlides(nodes);
+  }
   pause() { this.paused = true; this.stop(); this.syncMedia(); }
   resume() { this.paused = false; this.start(); this.syncMedia(); }
   next() { this.show(this.index + 1); }
