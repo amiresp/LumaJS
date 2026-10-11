@@ -5,6 +5,7 @@
 const VERSION = "luma-static-v1";
 const ROOT = new URL(self.registration.scope);
 const ALLOWED = /\.(?:js|css|html|png|jpg|jpeg|webp|svg|gif|woff2?)$/i;
+const PUBLIC_DIR = /^\/(?:js\/|themes\/|assets\/|images\/|css\/)/i;
 self.addEventListener("install", event => {
   event.waitUntil(self.skipWaiting());
 });
@@ -21,7 +22,8 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
   if (!url.pathname.startsWith(ROOT.pathname)) return;
-  if (!ALLOWED.test(url.pathname)) return;
+  if (!ALLOWED.test(url.pathname) || !PUBLIC_DIR.test(url.pathname)) return;
+  if (url.pathname.endsWith(".html") && !url.pathname.startsWith("/themes/")) return;
   if (url.pathname.includes("/api/") || request.headers.has("authorization")) return;
   if (request.mode === "navigate") return;
   event.respondWith((async () => {
