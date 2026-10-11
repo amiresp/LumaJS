@@ -19,3 +19,6 @@ Review and verify these rules in CI; prose rules alone are not a security bounda
 
 13. **No business routes in Core.** Route definitions belong in an application routing manifest (`apps/<app>/routes.js`) or an optional Feature-exported manifest. Core may only supply generic routing machinery.
 14. **HTML validation is mandatory.** Before proposing changes, run `npm run validate:html` and `npm test`. Never emit literal `\\n` or accidental `/n` in HTML markup/text; use real newlines. See `docs/html-validation.md`.
+
+15. **Mandatory HTML fallback:** Whenever a component HTML template is absent or unavailable in the active theme, resolve it from `themes/core-default/dependency/Global/<Component>/<Component>.html`. `core-default` is a permanent architectural fallback; never remove, disable, or require application authors to duplicate its templates. Theme overrides contain HTML/CSS only and maintain the component's `data-id` contract.
+16. **Lifecycle isolation:** Dispose child components before parents, isolate error-reporting callbacks, and use bounded network/library load times. Include regression tests for fallback, pending mounts, restart, and nested cleanup.
