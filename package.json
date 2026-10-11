@@ -8,7 +8,8 @@
     "validate:html": "node tools/validate-html.js",
     "check": "npm run validate:html && npm test && npm run audit:source",
     "test:browser": "playwright test",
-    "audit:source": "node tools/security-audit.js"
+    "audit:source": "node tools/security-audit.js",
+    "playground": "node tools/serve-static.js"
   },
   "devDependencies": {
     "jsdom": "^26.1.0",
