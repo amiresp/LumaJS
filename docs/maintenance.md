@@ -7,3 +7,6 @@ CI runs `tools/check-doc-sync.js` for pull requests and rejects changes touching
 New Components require docs/create-component.md, data-id contract and tests. A new Example requires a README launch command. Changes to offline behavior require docs/offline.md; customSelect changes require docs/custom-select.md; routing changes require docs/routing.md. Do not remove `core-default` fallback.
 
 No heavy build step is required for browser runtime; `npm` is used for developer tests and static playground only.
+
+
+Icon changes require `docs/icons.md`, the upstream MIT notice, README.md, AGENTS.md, architecture and migration-status updates, plus an icon gallery test. All new shared-component controls should prefer the local Icon component over hand-written Unicode glyphs.
