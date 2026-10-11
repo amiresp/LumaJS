@@ -12,8 +12,8 @@ Run `npm run playground` and open http://127.0.0.1:8765/examples/icons/ . Search
 import { createIconElement, renderIcon, iconNames } from
   "/js/dependency/global/GlobalComponents/Icon/Icon.js";
 const icon = createIconElement("arrow-left", { size: 20, label: "Back" });
-document.querySelector("#back").prepend(icon);
-renderIcon(document.querySelector("#status-icon"), "circle-check", {size:22});
+document.querySelector('[data-id="back"]').prepend(icon);
+renderIcon(document.querySelector('[data-id="status-icon"]'), "circle-check", {size:22});
 ```
 
 For decorative icons omit `label`: output uses `aria-hidden=true`. Give the containing button/link an accessible name such as `aria-label="Close"`. Every name is validated against the bundled allowlist; arbitrary SVG/HTML is never accepted.
