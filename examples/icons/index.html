@@ -11,7 +11,7 @@ function refresh(){
  const names=iconNames.filter(name=>name.includes(query));
  const fragment=document.createDocumentFragment();
  for(const name of names){
-  const button=document.createElement("button");button.type="button";button.className="tile";button.title="Copy "+name;
+  const button=document.createElement("button");button.type="button";button.className="tile";button.dataset.id="icon-tile";button.title="Copy "+name;
   button.append(createIconElement(name,{size:28}),Object.assign(document.createElement("span"),{textContent:name}));
   button.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(name);button.title="Copied "+name;}catch{button.title=name;}});
   fragment.append(button);
