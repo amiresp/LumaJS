@@ -98,7 +98,8 @@ export class Luma {
     host.dispatchEvent(new CustomEvent("luma:error", { detail: { error }, bubbles: true }));
   }
   async hydrate(scope = document) {
-    const hosts = [...scope.querySelectorAll("[data-luma]")].filter(host => {
+    const candidates = [ ...(scope.matches?.("[data-luma]") ? [scope] : []), ...scope.querySelectorAll("[data-luma]") ];
+    const hosts = candidates.filter(host => {
       const parent = host.parentElement?.closest("[data-luma]");
       return !parent || parent === scope || !scope.contains(parent);
     });
