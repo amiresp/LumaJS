@@ -43,3 +43,7 @@ Useful examples: `arrow-left`, `arrow-up-right`, `chevron-down`, `menu-2`, `cred
 Aliases: `info` → `info-circle`, `danger` → `alert-triangle`, `hamburger` → `menu-2`, `close` → `x`, `pin` → `map-pin`, `play` → `player-play`, `pause` → `player-pause`, `chart` → `chart-bar`, `back` → `arrow-left`, `forward` → `arrow-right`. Prefer canonical Tabler names in source code.
 
 When updating icon assets, download from the **official Tabler source**, preserve `third_party/tabler-icons-LICENSE`, update this document, verify all SVGs parse and contain no unsafe embedded content, then run `npm run check` and `npm run test:browser`. Avoid auto-loading the entire upstream icon library.
+
+## DOM hook contract
+
+All behavioral targets are selected through stable `data-id` attributes, for example `document.querySelector('[data-id="back"]')`. `id` and CSS class selectors are not allowed for component binding, even in README snippets and Playground examples. Component hosts use `[data-luma="Icon"]`. CI enforces this through `npm run check:hooks`.
