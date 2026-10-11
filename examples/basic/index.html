@@ -4,12 +4,12 @@
 <body>
   <h1>LumaJS — zero-build demo</h1>
   <p>Component behavior is JavaScript; themes provide HTML and CSS.</p>
-  <main><div data-luma="Slider"></div><div data-luma="Story"></div></main>
+  <main><div data-luma="Slider"></div><div data-luma="Stories"></div></main>
   <script type="module">
-    import { Luma } from "../../core/Luma.js";
+    import { Luma } from "../../js/core/Luma.js";
     const runtime = new Luma({ base: "../../" });
-    runtime.register("Slider", { load: () => import("../../components/Slider/Slider.js") });
-    runtime.register("Story", { load: () => import("../../components/Story/Story.js") });
+    runtime.register("Slider", { load: () => import("../../js/dependency/global/GlobalComponents/Slider/Slider.js") });
+    runtime.register("Stories", { load: () => import("../../js/dependency/global/GlobalComponents/Stories/Stories.js") });
     await runtime.hydrate();
     window.addEventListener("pagehide", () => { void runtime.destroy(); }, { once: true });
   </script>
