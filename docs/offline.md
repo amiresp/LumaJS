@@ -1,5 +1,3 @@
-# Resilience model
+# Offline assets (opt-in)
 
-The production browser runtime has no mandatory Node.js or build requirement. `HttpClient` adds abort propagation, timeout and bounded GET/HEAD retries. It does **not** persist sensitive responses or automatically cache API data.
-
-Static assets can be served with immutable versioned URLs and HTTP caching. Any Service Worker must be **opt-in**, scoped to each app, and must never cache authenticated API responses by default. Offline caching and UI recovery are still integration work, not implemented by the HTTP client.
+Import `registerOffline` from `js/shared/offline/registerOffline.js` explicitly. On HTTPS, a service worker caches previously visited same-origin public static GET assets, falling back on network errors. It refuses API, navigation, authorization, cross-origin and private/no-store responses. The runtime never requires Service Worker or Node. Increment the SW cache version for releases. First offline visit and private data are not supported. Do not treat static offline caching as complete offline application support.
