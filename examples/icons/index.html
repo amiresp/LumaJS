@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LumaJS — Tabler icon gallery</title><style>body{font:16px system-ui;max-width:1100px;margin:2rem auto;padding:0 1rem}input{font:inherit;padding:.65rem;width:min(100%,400px)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.7rem;margin-top:1rem}.tile{display:grid;justify-items:center;gap:.6rem;padding:1rem .3rem;background:#f4f6fb;border:1px solid #e3e6ed;border-radius:.6rem;font:inherit;cursor:pointer}.tile:hover{background:#eaf2fc}.tile span{font-size:.73rem;word-break:break-word;text-align:center}.tile svg{color:#27374c}.status{color:#555}</style></head><body>
 <h1>Tabler Icons for LumaJS</h1><p>Official locally bundled MIT SVG icons — no external font or CDN.</p>
-<label for="search">Search icons</label> <input id="search" type="search" placeholder="arrow, wallet, user, calendar, ..." autocomplete="off">
-<p class="status"><span id="count"></span> — click an icon to copy its name.</p><main id="icons" class="grid"></main>
+<label >Search icons</label> <input data-id="search" type="search" placeholder="arrow, wallet, user, calendar, ..." autocomplete="off">
+<p class="status"><span data-id="count"></span> — click an icon to copy its name.</p><main data-id="icons" class="grid"></main>
 <script type="module">
 import {iconNames,createIconElement} from "../../js/dependency/global/GlobalComponents/Icon/Icon.js";
-const root=document.getElementById("icons"),input=document.getElementById("search"),count=document.getElementById("count");
+const root=document.querySelector('[data-id="icons"]'),input=document.querySelector('[data-id="search"]'),count=document.querySelector('[data-id="count"]');
 function refresh(){
  const query=input.value.toLowerCase().trim();
  const names=iconNames.filter(name=>name.includes(query));
