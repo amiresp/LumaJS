@@ -23,7 +23,7 @@ export class CustomSelect {
   constructor(element, options = [], placeholder = "Select...", label = "", isMulti = false,
               searchLabel = "Search...", searchLabelNotFound = "No results",
               excludeFrom = null, defaultValue = null) {
-    if (typeof element === "string") element = document.getElementById(element);
+    if (typeof element === "string") element = [...document.querySelectorAll("[data-id]")].find(node => node.dataset.id === element) ?? null;
     if (!(element instanceof Element)) throw new TypeError("customSelect requires an Element");
     this.container = element;
     this.options = options;
