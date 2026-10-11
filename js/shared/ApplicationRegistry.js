@@ -1,3 +1,4 @@
+import { RouteResolver } from "../core/RouteResolver.js";
 /**
  * Application-scoped feature / option / caller dependency registry.
  * This module is not imported by Core; apps opt into composition.
@@ -7,6 +8,7 @@ export class ApplicationRegistry {
     if (!name || !/^[a-z][\w-]*$/i.test(name)) throw new Error("Invalid app name");
     this.name = name;
     this.routes = [];
+    this.router = new RouteResolver();
     this.features = new Map();
     this.options = new Map();
     this.callers = new Map();
@@ -16,6 +18,7 @@ export class ApplicationRegistry {
     for (const route of routes) {
       if (!route || typeof route.path !== "string" || !route.path.startsWith("/")) throw new TypeError("Route needs absolute path");
       if (this.routes.some(existing => existing.path === route.path)) throw new Error("Duplicate app route: " + route.path);
+      this.router.register(route);
       this.routes.push(Object.freeze({ ...route }));
     }
     return this;
@@ -30,8 +33,7 @@ export class ApplicationRegistry {
     return this;
   }
   resolve(path) {
-    const normalized = new URL(path, "https://app.invalid").pathname;
-    return this.routes.find(route => route.path === normalized) ?? null;
+    return this.router.resolve(path)?.route ?? null;
   }
   async loadFeature(name, context = {}) {
     const factory = this.features.get(name);

@@ -40,8 +40,17 @@ export function validateHtml(text, { fragment = false } = {}) {
       }
     }
     if (node.attrs) {
-      for (const attr of node.attrs) if (/\\n/.test(attr.value) || /(?:^|\s)\/n(?=\s|$)/.test(attr.value)) {
-        errors.push(`line ${loc?.startLine || 1}: literal escape in attribute ${attr.name}`);
+      for (const attr of node.attrs) {
+        if (/\\n/.test(attr.value) || /(?:^|\s)\/n(?=\s|$)/.test(attr.value)) {
+          errors.push(`line ${loc?.startLine || 1}: literal escape in attribute ${attr.name}`);
+        }
+        if (/^on[a-z]+$/i.test(attr.name) || attr.name === "srcdoc") {
+          errors.push(`line ${loc?.startLine || 1}: unsafe HTML attribute ${attr.name}`);
+        }
+        if (["href", "src", "action", "formaction", "xlink:href"].includes(attr.name) &&
+            /^(?:javascript|vbscript|data):/i.test(attr.value.trim())) {
+          errors.push(`line ${loc?.startLine || 1}: unsafe URL in ${attr.name}`);
+        }
       }
     }
     for (const child of node.childNodes || []) walk(child);
