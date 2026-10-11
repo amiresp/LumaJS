@@ -7,7 +7,7 @@ Use `/examples/custom-select/` for an interactive zero-build demo.
 ```js
 import {CustomSelect} from "/js/shared/widgets/customSelect/customSelect.js";
 const select = new CustomSelect(
-  document.getElementById("select"),
+  document.querySelector('[data-id="select"]'),
   [{value:1,text:"Notebook",attr_subtext:"Paper",attr_tokens:["writing","notes"]}],
   "Choose an item"
 );
