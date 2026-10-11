@@ -85,8 +85,8 @@ In a page rendered by **Express, PHP, ASP.NET Core, a plain HTML site or any HTT
 <div data-luma="Alert"></div>
 <div data-luma="Dialog"></div>
 
-<button id="notify">Notify</button>
-<button id="ask">Ask</button>
+<button data-id="notify">Notify</button>
+<button data-id="ask">Ask</button>
 
 <script type="module">
   import { Luma } from "/ui/js/core/Luma.js";
@@ -104,11 +104,11 @@ In a page rendered by **Express, PHP, ASP.NET Core, a plain HTML site or any HTT
 
   await luma.hydrate();
   const get = name => luma.instances.get(document.querySelector('[data-luma="' + name + '"]'));
-  document.getElementById("notify").addEventListener("click", () => {
+  document.querySelector('[data-id="notify"]').addEventListener("click", () => {
     get("Toast")?.show("Operation completed", { type: "success" });
     get("Alert")?.show("Details saved", { type: "info" });
   });
-  document.getElementById("ask").addEventListener("click", async () => {
+  document.querySelector('[data-id="ask"]').addEventListener("click", async () => {
     const confirmed = await get("Dialog")?.open({
       title: "Continue?", message: "Do you want to continue?"
     });
@@ -180,7 +180,7 @@ LumaJS includes a curated local collection of **120+ official Tabler outline SVG
 ```js
 import {createIconElement,renderIcon} from "./js/dependency/global/GlobalComponents/Icon/Icon.js";
 button.prepend(createIconElement("arrow-left", {size:20,label:"Go back"}));
-renderIcon(document.querySelector("#status-icon"), "circle-check", {size:20});
+renderIcon(document.querySelector('[data-id="status-icon"]'), "circle-check", {size:20});
 ```
 
 Icon is also a standard Luma component with `data-luma="Icon"`, a `core-default` template, `set(name)` and `destroy()`. Toast, Alert, Dialog, Stories and Slider controls now use the locally bundled Tabler icons. See [Icon Reference](docs/icons.md). Keep the original Tabler MIT copyright notice with redistributions.
