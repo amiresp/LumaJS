@@ -1,3 +1,4 @@
+import {renderIcon} from "../Icon/Icon.js";
 /** Story viewer: lifecycle and DOM ownership are restricted to root. */
 export class Stories {
   constructor(root, { interval = 6000 } = {}) {
@@ -20,6 +21,7 @@ export class Stories {
     this.unlockScroll = null;
     this.controller = new AbortController();
     const signal = this.controller.signal;
+    for(const [id,name] of [["pause","player-pause"],["mute","volume-off"],["close","x"]]){const button=root.querySelector('[data-id="'+id+'"]');if(button)renderIcon(button,name,{size:22});}
     for (const [id, action] of [["open", () => this.open()], ["close", () => this.close()], ["next", () => this.next()], ["previous", () => this.previous()], ["pause", () => this.togglePause()], ["mute", () => this.toggleMute()]]) {
       root.querySelector(`[data-id="${id}"]`)?.addEventListener("click", action, { signal });
     }
@@ -223,6 +225,7 @@ export class Stories {
   toggleMute() {
     this.muted = !this.muted;
     for (const video of this.root.querySelectorAll("video")) video.muted = this.muted;
+    const muteButton=this.root.querySelector('[data-id="mute"]');if(muteButton)renderIcon(muteButton,this.muted?"volume-off":"volume",{size:22});
     this.emit("mute");
   }
   next() { if(this.index+1>=this.items.length && this.galleryIndex+1<this.galleries.length) this.setGallery(this.galleryIndex+1); else this.show(this.index+1); }
