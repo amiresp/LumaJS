@@ -19,6 +19,7 @@ export class Slider {
     this.paused = false;
     this.observer = null;
     this.visibleVideos = new Set();
+    this.swipeStart = null;
     this.loop = attr.loop === undefined ? loop : attr.loop !== "false";
     this.autoplay = attr.autoplay === undefined ? this.autoplay : attr.autoplay !== "false";
     this.index = 0;
@@ -36,6 +37,18 @@ export class Slider {
       if (event.key === "ArrowRight") this.interact("next");
       if (event.key === "ArrowLeft") this.interact("previous");
     }, { signal });
+    root.addEventListener("pointerdown", event => {
+      if(event.target.closest("button, a, input, textarea, select"))return;
+      this.swipeStart={x:event.clientX,y:event.clientY};
+    }, { signal });
+    root.addEventListener("pointerup", event => {
+      if(!this.swipeStart)return;
+      const dx=event.clientX-this.swipeStart.x;
+      const dy=event.clientY-this.swipeStart.y;
+      this.swipeStart=null;
+      if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.25) this.interact(dx<0?"next":"previous");
+    }, { signal });
+    root.addEventListener("pointercancel", () => {this.swipeStart=null;}, {signal});
     root.addEventListener("mouseenter", () => this.stop(), { signal });
     root.addEventListener("mouseleave", () => this.start(), { signal });
     root.addEventListener("focusin", () => this.stop(), { signal });
