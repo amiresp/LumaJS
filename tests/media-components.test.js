@@ -72,3 +72,44 @@ test("Stories render gallery media and titles safely",()=>{
     stories.destroy();
   }finally{env.restore();}
 });
+
+test("Stories builds avatar buttons, immersive timeline, and restores page scroll",()=>{
+  const env=domEnvironment('<div data-id="root"><div data-id="gallery-list"></div><button data-id="open"></button><div data-id="viewer" hidden><div data-id="progress-segments"></div><span data-id="viewer-title"></span><div data-id="story-items"></div><button data-id="close"></button><button data-id="next"></button></div></div>');
+  try {
+    const stories=new Stories(env.dom.window.document.querySelector('[data-id="root"]'));
+    stories.setGalleries([{title:"Example",cover:"https://example.test/avatar.png",items:[{title:"one"},{title:"two"}]}]);
+    assert.equal(env.dom.window.document.querySelectorAll('[data-id="gallery-button"] .luma-story-avatar-photo img').length,1);
+    stories.open();
+    assert.equal(env.dom.window.document.body.style.overflow,"hidden");
+    assert.equal(env.dom.window.document.querySelectorAll(".luma-story-segment").length,2);
+    stories.show(1);
+    stories.close();
+    assert.equal(env.dom.window.document.body.style.overflow,"");
+    stories.destroy();
+  } finally {env.restore();}
+});
+test("Slider navigation pagination and declarative options work",()=>{
+ const env=domEnvironment('<div data-id="root" data-speed="650" data-loop="false" data-navigation="true"><div data-id="slides"><section data-id="slide">one</section><section data-id="slide">two</section></div><nav data-id="controls"><button data-id="next"></button><button data-id="previous"></button></nav><div data-id="pagination"></div><span data-id="counter"></span></div>');
+ try{
+  const slider=new Slider(env.dom.window.document.querySelector('[data-id="root"]'),{autoplay:false});
+  assert.equal(slider.speed,650); assert.equal(slider.loop,false);
+  assert.equal(env.dom.window.document.querySelectorAll('[data-id="page"]').length,2);
+  slider.configure({slidesPerView:2,pagination:true,breakpoints:{"600":{slidesPerView:3}}});
+  assert.equal(slider.activeSlidesPerView(),2);
+  slider.interact("next");
+  assert.equal(slider.index,1);
+  slider.destroy();
+ }finally{env.restore();}
+});
+
+test("Slider responds to pointer swipe without activating DOM control buttons",()=>{
+ const env=domEnvironment('<div data-id="root"><div data-id="slides"><section data-id="slide">one</section><section data-id="slide">two</section></div><span data-id="counter"></span></div>');
+ try {
+  const root=env.dom.window.document.querySelector('[data-id="root"]');
+  const slider=new Slider(root,{autoplay:false});
+  root.dispatchEvent(new env.dom.window.MouseEvent("pointerdown",{bubbles:true,clientX:220,clientY:20}));
+  root.dispatchEvent(new env.dom.window.MouseEvent("pointerup",{bubbles:true,clientX:60,clientY:25}));
+  assert.equal(slider.index,1);
+  slider.destroy();
+ } finally {env.restore();}
+});

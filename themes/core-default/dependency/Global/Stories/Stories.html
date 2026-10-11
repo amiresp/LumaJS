@@ -1,9 +1,23 @@
 <section data-id="root" class="luma-story">
-  <div data-id="gallery-list" aria-label="Story galleries"></div><button data-id="open" type="button">Open stories</button>
-  <div data-id="viewer" class="luma-story-viewer" role="dialog" aria-modal="true" aria-label="Stories" hidden>
-    <div class="luma-story-controls"><span data-id="progress" aria-live="polite"></span><span data-id="progress-bar" role="progressbar" aria-label="Story progress"></span><button data-id="pause" type="button">Pause / Resume</button><button data-id="mute" type="button">Mute / Unmute</button><button data-id="close" type="button" aria-label="Close stories">✕</button></div>
-    <article data-id="story-item"><h2>Welcome to LumaJS</h2><p>Story component, no external library.</p></article>
-    <article data-id="story-item" hidden><h2>Customizable</h2><p>Themes override presentation, not JavaScript.</p></article>
-    <div class="luma-story-controls"><button data-id="previous" type="button">Previous</button><button data-id="next" type="button">Next</button></div>
+  <div data-id="gallery-list" class="luma-story-rail" aria-label="Story galleries"></div>
+  <button data-id="open" class="luma-story-avatar" type="button" aria-label="Open stories">
+    <span class="luma-story-avatar-ring"><span class="luma-story-avatar-photo"><span>✦</span></span></span>
+    <span class="luma-story-avatar-label">Stories</span>
+  </button>
+  <div data-id="viewer" class="luma-story-viewer" role="dialog" aria-modal="true" aria-label="Story viewer" tabindex="-1" hidden>
+    <div data-id="backdrop" class="luma-story-backdrop" aria-hidden="true"></div>
+    <div class="luma-story-stage">
+      <div data-id="progress-segments" class="luma-story-timeline" aria-label="Story timeline"></div>
+      <div class="luma-story-topbar">
+        <div class="luma-story-identity"><span data-id="viewer-avatar" class="luma-story-mini-avatar">✦</span><span data-id="viewer-title">Stories</span><span data-id="progress" class="luma-story-count" aria-live="off"></span></div>
+        <div class="luma-story-actions"><button data-id="pause" type="button" aria-label="Pause story">Ⅱ</button><button data-id="mute" type="button" aria-label="Unmute">◖</button><button data-id="close" type="button" aria-label="Close stories">✕</button></div>
+      </div>
+      <div data-id="story-items" class="luma-story-media">
+        <article data-id="story-item" data-duration="5000"><div class="luma-story-demo-art">Welcome to LumaJS</div><p>Immersive stories, without a build step.</p></article>
+        <article data-id="story-item" data-duration="5000" hidden><div class="luma-story-demo-art luma-story-demo-art-alt">Your next story</div><p>All the styling belongs to your theme.</p></article>
+      </div>
+      <button data-id="previous" type="button" class="luma-story-hit luma-story-hit-prev" aria-label="Previous story"></button>
+      <button data-id="next" type="button" class="luma-story-hit luma-story-hit-next" aria-label="Next story"></button>
+    </div>
   </div>
 </section>
