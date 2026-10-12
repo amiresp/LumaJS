@@ -15,3 +15,6 @@ Every change to user-facing selectors or examples must retain `data-id` hooks (h
 
 
 Starter UI changes must update docs/starter-components.md, README, AGENTS, architecture and migration-status files. Follow the mandatory data-id selection checker, core-default HTML fallback and tests for any changed component API.
+
+
+Changes to the root Playground navigation or `examples/admin/` must update README, AGENTS, architecture, migration status, starter component guide and `docs/admin-playground.md`; ensure browser tests cover new links and interactions without logins.
