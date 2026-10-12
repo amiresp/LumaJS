@@ -50,3 +50,8 @@ Eleven additional optional components reside in `js/dependency/global/GlobalComp
 ## Playground front door / example admin (PR #8)
 
 `index.html` is a lightweight directory of demos served by the Node static playground at `/`. `examples/admin/index.html` is an explicitly unauthenticated, in-memory demonstration combining GlobalApp and the existing starter components; it is not the app's auth system or a production admin template. The dashboard does not add any endpoint, session, or route into Core. All DOM behavior uses `data-id` and component hosts `data-luma`. See `docs/admin-playground.md`.
+
+
+## Composition of shared controls
+
+Shared UI primitives may be composed by JavaScript class instances where nesting separate runtime mounts is unnecessary. Button accepts an existing semantic button as well as its themed root; Dialog/Toast/Alert/Badge/EmptyState/Sidebar and DataGrid use it. DataGrid internally owns a Pagination instance and destroys it with the grid. Select obtains its CSS through a module-relative URL with document-scoped reference counting, making it functional outside demos. This avoids duplicate grids/pagination and keeps Core neutral. See docs/starter-components.md.
