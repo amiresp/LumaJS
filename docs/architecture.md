@@ -55,3 +55,8 @@ Eleven additional optional components reside in `js/dependency/global/GlobalComp
 ## Composition of shared controls
 
 Shared UI primitives may be composed by JavaScript class instances where nesting separate runtime mounts is unnecessary. Button accepts an existing semantic button as well as its themed root; Dialog/Toast/Alert/Badge/EmptyState/Sidebar and DataGrid use it. DataGrid internally owns a Pagination instance and destroys it with the grid. Select obtains its CSS through a module-relative URL with document-scoped reference counting, making it functional outside demos. This avoids duplicate grids/pagination and keeps Core neutral. See docs/starter-components.md.
+
+
+## Starter UI visual composition
+
+DataGrid column headers use accessible focusable non-button sorting labels rather than the visually prominent global Button component; its Pagination remains shared. Button's ghost variant is the standard background-free control for icon-only dismiss actions. Sidebar implements hierarchical expandable menus with `data-id=expand` and `data-id=children` hooks. The starter showroom includes Toast, Dialog, Alert and Button variants. These presentation rules do not alter Core or the core-default fallback contract.
