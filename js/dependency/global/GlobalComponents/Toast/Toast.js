@@ -16,7 +16,7 @@ export class Toast {
     const status=doc.createElement("span");status.dataset.id="status-icon";status.append(createIconElement(({success:"circle-check",warning:"alert-triangle",error:"alert-circle",info:"info-circle"})[type]||"info-circle",{documentRef:doc,size:21}));
     item.append(status,text,close);this.list.append(item);
     const record={timer:null,close:()=>{if(!this.entries.has(item))return;clearTimeout(record.timer);record.button?.destroy();item.remove();this.entries.delete(item);}};
-    record.button=new Button(close).configure({variant:"secondary",onClick:record.close});
+    record.button=new Button(close).configure({variant:"ghost",onClick:record.close});
     this.entries.set(item,record);
     if(duration>0)record.timer=setTimeout(record.close,duration);
     while(this.entries.size>this.max)this.entries.values().next().value.close();
