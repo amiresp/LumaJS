@@ -45,3 +45,8 @@ Behavioral DOM selectors use `data-id` exclusively; component hosts use `data-lu
 ## General starter UI layer
 
 Eleven additional optional components reside in `js/dependency/global/GlobalComponents/`: EmptyState, Loading, Button, DataGrid, Select, Sidebar, Breadcrumb, Pagination, Card, Accordion, Badge. Each has matching core-default HTML/CSS. GlobalApp registers them lazily. Select uses the standalone customSelect via adapter; DataGrid is local-data only. See `docs/starter-components.md` and `examples/starter/`. No dependencies are added to Core.
+
+
+## Playground front door / example admin (PR #8)
+
+`index.html` is a lightweight directory of demos served by the Node static playground at `/`. `examples/admin/index.html` is an explicitly unauthenticated, in-memory demonstration combining GlobalApp and the existing starter components; it is not the app's auth system or a production admin template. The dashboard does not add any endpoint, session, or route into Core. All DOM behavior uses `data-id` and component hosts `data-luma`. See `docs/admin-playground.md`.
