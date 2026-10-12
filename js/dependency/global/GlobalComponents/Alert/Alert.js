@@ -9,7 +9,7 @@ export class Alert {
     this.dismiss=root.querySelector('[data-id="dismiss"]');
     if(this.dismiss){this.dismiss.replaceChildren(createIconElement("x",{documentRef:root.ownerDocument,size:18}));}
     this.controller=new (root.ownerDocument.defaultView?.AbortController||AbortController)();
-    this.dismissButton=this.dismiss?new Button(this.dismiss).configure({variant:"secondary",onClick:()=>this.hide()}):null;
+    this.dismissButton=this.dismiss?new Button(this.dismiss).configure({variant:"ghost",onClick:()=>this.hide()}):null;
     this.hide();
   }
   show(message,{type="info",dismissible=true}={}){
