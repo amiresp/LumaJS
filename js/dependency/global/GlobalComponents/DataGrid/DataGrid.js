@@ -47,9 +47,8 @@ export class DataGrid {
       control.dataset.id="sort";control.dataset.key=col.key;
       control.textContent=String(col.label??col.key);
       if(this.sortKey===col.key)th.setAttribute("aria-sort",this.sortDir===1?"ascending":"descending");
-      const activate=()=>{this.sortDir=this.sortKey===col.key?-this.sortDir:1;this.sortKey=col.key;this.page=1;this.render();};
-      control.addEventListener("click",activate,{signal:this.controller.signal});
-      control.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();activate();}},{signal:this.controller.signal});
+      control.addEventListener("click",()=>{this.sortDir=this.sortKey===col.key?-this.sortDir:1;this.sortKey=col.key;this.page=1;this.render();});
+      control.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();control.click();}});
       th.append(control);headings.append(th);
     }
     head.append(headings);
