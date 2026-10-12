@@ -1,0 +1,1 @@
+.luma-pagination{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}.luma-pagination button{border:1px solid #c8d4e6;background:#fff;border-radius:.45rem;padding:.5rem .7rem;cursor:pointer}.luma-pagination button[aria-current="page"]{background:#2356c5;color:#fff}.luma-pagination button:disabled{opacity:.45;cursor:not-allowed}
