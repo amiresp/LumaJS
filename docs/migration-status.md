@@ -49,3 +49,10 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Added interactive examples/starter playground; Node.js behavior and Chromium browser tests.
 - Select reuses the existing customSelect; DataGrid supports local filtering/sorting/pagination and is **not** a complete enterprise/server-side grid.
 - Documented their API contracts in docs/starter-components.md. Further production accessibility, internationalization, virtualization and server-side integrations are out of scope of this starter pass.
+
+
+## Runnable Playground hub and admin example
+
+- Added a root `index.html` hub linking starter components, the admin dashboard, the existing media/feedback demo, icons, architecture, customSelect, and the offline page.
+- Added a no-login admin dashboard in `examples/admin/` using existing GlobalComponents and in-memory example data, with browser interaction coverage.
+- This is a showcase of composition, not a port of a specific legacy admin backend. All example user data and metric values are fictional.
