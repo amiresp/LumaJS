@@ -1,4 +1,5 @@
 import {createIconElement} from "../Icon/Icon.js";
+import {Button} from "../Button/Button.js";
 /** Focus-managed modal confirmation dialog; no HTML injection. */
 export class Dialog {
   constructor(root){
@@ -13,9 +14,10 @@ export class Dialog {
     this.controller=new (root.ownerDocument.defaultView?.AbortController||AbortController)();
     this.pending=null;this.previousFocus=null;this.destroyed=false;
     const signal=this.controller.signal;
-    this.confirm?.addEventListener("click",()=>this.close(true),{signal});
-    this.cancel?.addEventListener("click",()=>this.close(false),{signal});
-    this.closeButton?.addEventListener("click",()=>this.close(false),{signal});
+    this.buttons=[];
+    if(this.confirm)this.buttons.push(new Button(this.confirm).configure({variant:"primary",onClick:()=>this.close(true)}));
+    if(this.cancel)this.buttons.push(new Button(this.cancel).configure({variant:"secondary",onClick:()=>this.close(false)}));
+    if(this.closeButton)this.buttons.push(new Button(this.closeButton).configure({variant:"secondary",onClick:()=>this.close(false)}));
     this.panel.addEventListener("keydown",event=>{
       if(event.key==="Escape"){event.preventDefault();this.close(false);}
       if(event.key!=="Tab")return;
@@ -47,6 +49,6 @@ export class Dialog {
     if(this.previousFocus?.isConnected)this.previousFocus.focus();
     this.previousFocus=null;resolve?.(Boolean(result));
   }
-  destroy(){if(this.destroyed)return;this.destroyed=true;this.close(false);this.controller.abort();}
+  destroy(){if(this.destroyed)return;this.destroyed=true;this.close(false);this.controller.abort();for(const button of this.buttons)button.destroy();}
 }
 export function create(root){return new Dialog(root);}
