@@ -38,3 +38,5 @@ Option/Reports/
 Correct flow: `OrdersApp → OrdersCaller → backend`; `OrdersApp → Global DataGrid/Toast/Select`. Incorrect flow: `DataGrid → DataGridCaller`, `Toast → ToastCaller`, or one Caller per row, button or visual element. A display-only Feature requires no Caller. `GlobalCaller` can be reused as a generic transport **inside a Feature Caller** but should not be blindly injected into every component.
 
 Do not add components or files merely to wrap a single import/re-export. Use existing GlobalComponents directly unless the new adapter contributes a verifiable responsibility (behavior, lifecycle, state, domain composition, configuration, or theme presentation). This applies equally to Feature, Option and Page scaffolding.
+
+**Implementation update:** `GlobalApp` now registers/hydrates UI components without constructing, retaining, or destroying `GlobalCaller`. Networking Feature/Option owners create and dispose their own domain Caller when network access is actually needed; display-only modules create none.
