@@ -41,3 +41,18 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Not all 5000+ upstream Tabler icons are included; this is a deliberately curated general-purpose set.
 
 - Enforced data-id-only behavioral selectors across runtime, examples and tests, migrated earlier ID-driven playgrounds, and added `npm run check:hooks` CI guard.
+
+
+## Starter UI additions
+
+- Introduced eleven general-purpose GlobalComponents with matching core-default templates, lifecycle cleanup and data-id hooks.
+- Added interactive examples/starter playground; Node.js behavior and Chromium browser tests.
+- Select reuses the existing customSelect; DataGrid supports local filtering/sorting/pagination and is **not** a complete enterprise/server-side grid.
+- Documented their API contracts in docs/starter-components.md. Further production accessibility, internationalization, virtualization and server-side integrations are out of scope of this starter pass.
+
+
+## Runnable Playground hub and admin example
+
+- Added a root `index.html` hub linking starter components, the admin dashboard, the existing media/feedback demo, icons, architecture, customSelect, and the offline page.
+- Added a no-login admin dashboard in `examples/admin/` using existing GlobalComponents and in-memory example data, with browser interaction coverage.
+- This is a showcase of composition, not a port of a specific legacy admin backend. All example user data and metric values are fictional.

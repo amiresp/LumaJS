@@ -1,0 +1,1 @@
+.luma-breadcrumb ol{display:flex;gap:.5rem;list-style:none;padding:0;flex-wrap:wrap}.luma-breadcrumb li+li:before{content:"/";color:#8896a8;margin-inline-end:.5rem}.luma-breadcrumb [aria-current="page"]{font-weight:650}

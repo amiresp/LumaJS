@@ -1,0 +1,1 @@
+.luma-button button{border:0;padding:.7rem 1rem;border-radius:.55rem;background:#2356c5;color:#fff;cursor:pointer;font:inherit}.luma-button[data-variant="secondary"] button{background:#e5ebf6;color:#152944}.luma-button[data-variant="danger"] button{background:#ae333b}.luma-button button:disabled{opacity:.55;cursor:not-allowed}.luma-button [hidden]{display:none}
