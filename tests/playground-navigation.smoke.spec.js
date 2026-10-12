@@ -12,8 +12,9 @@ test("playground home links to every available demo",async({page})=>{
 });
 test("no-login admin dashboard mounts and interacts with actual GlobalComponents",async({page})=>{
  await page.goto("/examples/admin/");
- for(const name of ["Sidebar","Breadcrumb","Button","DataGrid","Select","Accordion","Pagination","EmptyState","Toast","Dialog","Card"])
+ for(const name of ["Sidebar","Breadcrumb","Button","DataGrid","Select","Accordion","EmptyState","Toast","Dialog","Card"])
   await expect(page.locator('[data-luma="'+name+'"]').first()).toHaveAttribute("data-load-state","ready");
+ await expect(page.locator('[data-luma="DataGrid"] [data-id="pagination-host"] .luma-pagination')).toHaveCount(1);
  await expect(page.locator('[data-id="users-value"]')).toHaveText("1,284");
  await expect(page.locator('[data-luma="DataGrid"] [data-id="row"]')).toHaveCount(4);
  await page.locator('[data-luma="DataGrid"] [data-id="search"]').fill("Kim");
