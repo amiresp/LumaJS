@@ -33,3 +33,8 @@ The zero-login `/examples/admin/` dashboard composes Sidebar, Breadcrumb, Button
 ## Composition rules
 
 DataGrid controls its own Pagination instance and its sort headers are Button-backed. Do not put a second Pagination component alongside DataGrid to control the same rows; that would create duplicated state. Shared Button behavior accepts existing semantic buttons in Dialog, Toast, Alert, Badge, EmptyState, Sidebar and Pagination; each owner must destroy composed button instances. Select is a thin adapter for customSelect and handles stylesheet load and cleanup independent of any Playground page. On an application composed through GlobalApp, the shared Button CSS is resolved from its core-default theme. See /examples/admin/ for integrated usage.
+
+
+## Presentation/interaction guidance
+
+Sortable DataGrid headers intentionally use a styled-neutral `div[data-id=sort]` with `role=button`, `tabindex=0` and keyboard Enter/Space activation; aria-sort belongs on TH. Pagination remains a shared component. Icon-only dismiss buttons use the shared Button `ghost` variant (transparent background, no border, no padding); `bare` is an alias. Sidebar `setItems` accepts arbitrarily nested `{label,href?,active?,expanded?,children?}` groups, provides buttons to expand/collapse groups and indented submenu styles. For live examples open `/examples/starter/` (includes Toast, Dialog and Alert) and `/examples/admin/` (nested navigation).
