@@ -60,3 +60,10 @@ Shared UI primitives may be composed by JavaScript class instances where nesting
 ## Starter UI visual composition
 
 DataGrid column headers use accessible focusable non-button sorting labels rather than the visually prominent global Button component; its Pagination remains shared. Button's ghost variant is the standard background-free control for icon-only dismiss actions. Sidebar implements hierarchical expandable menus with `data-id=expand` and `data-id=children` hooks. The starter showroom includes Toast, Dialog, Alert and Button variants. These presentation rules do not alter Core or the core-default fallback contract.
+
+
+## Caller ownership and avoiding useless wrappers
+
+The unit of ownership for remote data is the **Feature/Option**, not a GlobalComponent: `FeatureApp → FeatureCaller → transport/API` and `FeatureApp → normalized data → GlobalComponents`. Each Feature with network needs may have its own Caller; a distinct Option may have one too. A presentational Feature needs no Caller. GlobalComponents only receive normalized inputs/callbacks and never import domain Callers. `GlobalCaller`, where used, provides optional shared HTTP transport and does not imply a Caller for every widget. Pages assemble Features/Options and existing UI components rather than acting as API clients.
+
+An import-and-re-export-only module or one-line component forwarding an existing implementation without additional lifecycle, behavior, adapter boundary or tested presentation is architectural waste and must not be added. Legitimate component adapters must perform meaningful work (for example: Select owns stylesheet lifecycle and exposes a stable widget API). Registry lazy-import callbacks are registration logic, not wrapper files. See `AGENTS.md` rules 29–30 and `docs/structure-guide.md`.
