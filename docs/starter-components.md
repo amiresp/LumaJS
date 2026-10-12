@@ -28,3 +28,8 @@ Themes can override HTML/CSS while preserving required `data-id` hooks; missing 
 ## Integrated dashboard demonstration
 
 The zero-login `/examples/admin/` dashboard composes Sidebar, Breadcrumb, Button, Badge, DataGrid, Pagination, Select, Accordion, EmptyState, Loading, Card, Toast and Dialog into a working UI; mock records live in the demo only. The Playground home `/` links to that dashboard and all other examples. See `docs/admin-playground.md` for route and interaction details.
+
+
+## Composition rules
+
+DataGrid controls its own Pagination instance and its sort headers are Button-backed. Do not put a second Pagination component alongside DataGrid to control the same rows; that would create duplicated state. Shared Button behavior accepts existing semantic buttons in Dialog, Toast, Alert, Badge, EmptyState, Sidebar and Pagination; each owner must destroy composed button instances. Select is a thin adapter for customSelect and handles stylesheet load and cleanup independent of any Playground page. On an application composed through GlobalApp, the shared Button CSS is resolved from its core-default theme. See /examples/admin/ for integrated usage.
