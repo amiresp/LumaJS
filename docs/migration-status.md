@@ -80,3 +80,5 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Formalized one domain Caller per networking Feature/Option boundary, rather than a Caller per GlobalComponent. Presentational Features/Options do not require Callers.
 - `GlobalCaller` is a reusable optional transport, not a dependency of every component.
 - Re-export-only/import-only wrappers without an independent architectural responsibility are disallowed. Existing component adapters must justify their behavior/lifecycle.
+
+**Core reference audit (2026-10-12):** Inspected `js/core/` history; no new Core changes since the original 2026-10-11 foundational work. Experimental BindEngine remains removed. Removed implicit `GlobalCaller` construction and disposal from `GlobalApp`, with regression test ensuring UI orchestration is Caller-free. No Core revert was performed.
