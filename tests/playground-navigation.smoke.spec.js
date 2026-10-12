@@ -26,7 +26,7 @@ test("no-login admin dashboard mounts and interacts with actual GlobalComponents
  await expect(page.locator('[data-luma="Dialog"] [data-id="panel"]')).toBeVisible();
  await page.locator('[data-luma="Dialog"] [data-id="confirm"]').click();
  await expect(page.locator('[data-id="dialog-result"]')).toHaveText("Confirmed");
- await page.locator('[data-luma="Button"] [data-id="button"]').click();
+ await page.locator('[data-luma="Button"] [data-id="button"]').first().click();
  await expect(page.locator('[data-luma="DataGrid"] [data-id="row"]').first()).toContainText("New User");
  await expect(page.locator('[data-luma="Sidebar"] [data-id="navigation"]')).toBeVisible();
 });
