@@ -12,3 +12,6 @@ No heavy build step is required for browser runtime; `npm` is used for developer
 Icon changes require `docs/icons.md`, the upstream MIT notice, README.md, AGENTS.md, architecture and migration-status updates, plus an icon gallery test. All new shared-component controls should prefer the local Icon component over hand-written Unicode glyphs.
 
 Every change to user-facing selectors or examples must retain `data-id` hooks (hosts use `data-luma`) and pass `npm run check:hooks`. Do not use getElementById, CSS ID selectors or class selectors for binding. Stylesheet class selectors are allowed solely for presentation.
+
+
+Starter UI changes must update docs/starter-components.md, README, AGENTS, architecture and migration-status files. Follow the mandatory data-id selection checker, core-default HTML fallback and tests for any changed component API.
