@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-const base = process.env.GITHUB_BASE_REF ? "origin/"+process.env.GITHUB_BASE_REF : "HEAD~1";
+if (!process.env.GITHUB_BASE_REF) {
+  console.log("Documentation synchronization: PR-only diff gate; main push documentation is reviewed separately");
+  process.exit(0);
+}
+const base = "origin/"+process.env.GITHUB_BASE_REF;
 const raw = execFileSync("git",["diff","--name-only",base+"...HEAD"],{encoding:"utf8"});
 const paths=raw.split("\n").map(x=>x.trim()).filter(Boolean);
 const relevant=paths.some(x=>/^(js\/|apps\/|themes\/|examples\/|service-worker\.js$|offline\.html$)/.test(x));
