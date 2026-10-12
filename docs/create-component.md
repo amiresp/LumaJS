@@ -59,3 +59,8 @@ For architecture examples see `examples/structure/`, `js/Features/Sample/`, `js/
 ## Using shared Tabler icons
 
 For a control, import `createIconElement` from `../Icon/Icon.js` (adjust relative paths) and append the returned SVG. Give buttons their own `aria-label`, and keep the icon decorative unless a readable label is required. Avoid arbitrary SVG strings, external icon fonts and CDN calls. See `docs/icons.md`.
+
+
+## When **not** to create a component or Caller
+
+A UI component has no dedicated Caller. If it needs data, the owning Feature/Option retrieves it using its **one domain Caller when needed**, normalizes it, then calls the component API (`setRows`, `setItems`, `configure`, etc.). Do not create `CounterCaller.js` for this Counter. Do not create a new Component or Adapter if its entire contents merely import and re-export an existing module. A new file must own actual state, lifecycle, domain orchestration, behavior or intentional UI presentation. Reuse the original component directly when no such responsibility exists. See `docs/structure-guide.md`.
