@@ -1,11 +1,11 @@
 import { Pagination } from "../Pagination/Pagination.js";
-import { Button } from "../Button/Button.js";
+
 /** In-memory sortable/searchable grid composed with shared Pagination and Button. */
 export class DataGrid {
   constructor(root) {
     this.root=root;this.rows=[];this.columns=[];this.page=1;this.pageSize=10;
     this.query="";this.sortKey=null;this.sortDir=1;
-    this.controller=new AbortController();this.buttons=[];
+    this.controller=new AbortController();
     const host=root.querySelector('[data-id="pagination-host"]');
     if (!host) throw new Error("DataGrid requires data-id=pagination-host");
     const doc=root.ownerDocument;
@@ -39,19 +39,17 @@ export class DataGrid {
   render(){
     const doc=this.root.ownerDocument,head=this.root.querySelector('[data-id="head"]'),
       body=this.root.querySelector('[data-id="body"]');
-    for(const button of this.buttons)button.destroy();this.buttons=[];
     head.replaceChildren();body.replaceChildren();
     const headings=doc.createElement("tr");
     for(const col of this.columns){
       const th=doc.createElement("th");th.scope="col";
-      const control=doc.createElement("button");control.type="button";
+      const control=doc.createElement("div");control.tabIndex=0;control.setAttribute("role","button");
       control.dataset.id="sort";control.dataset.key=col.key;
       control.textContent=String(col.label??col.key);
-      if(this.sortKey===col.key)control.setAttribute("aria-sort",this.sortDir===1?"ascending":"descending");
-      this.buttons.push(new Button(control).configure({onClick:()=>{
-        this.sortDir=this.sortKey===col.key?-this.sortDir:1;
-        this.sortKey=col.key;this.page=1;this.render();
-      }}));
+      if(this.sortKey===col.key)th.setAttribute("aria-sort",this.sortDir===1?"ascending":"descending");
+      const activate=()=>{this.sortDir=this.sortKey===col.key?-this.sortDir:1;this.sortKey=col.key;this.page=1;this.render();};
+      control.addEventListener("click",activate,{signal:this.controller.signal});
+      control.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();activate();}},{signal:this.controller.signal});
       th.append(control);headings.append(th);
     }
     head.append(headings);
@@ -71,8 +69,7 @@ export class DataGrid {
     }));
   }
   destroy(){
-    this.controller.abort();for(const b of this.buttons)b.destroy();
-    this.buttons=[];this.pagination.destroy();
+    this.controller.abort();this.pagination.destroy();
   }
 }
 export const create=root=>new DataGrid(root);
