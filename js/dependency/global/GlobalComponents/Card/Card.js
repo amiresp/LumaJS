@@ -1,0 +1,1 @@
+export class Card{constructor(root){this.root=root;}set({title="",text="",footer=""}={}){this.root.querySelector('[data-id="title"]').textContent=title;this.root.querySelector('[data-id="body"]').textContent=text;this.root.querySelector('[data-id="footer"]').textContent=footer;}destroy(){}}export const create=root=>new Card(root);
