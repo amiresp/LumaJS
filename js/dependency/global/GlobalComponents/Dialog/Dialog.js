@@ -17,7 +17,7 @@ export class Dialog {
     this.buttons=[];
     if(this.confirm)this.buttons.push(new Button(this.confirm).configure({variant:"primary",onClick:()=>this.close(true)}));
     if(this.cancel)this.buttons.push(new Button(this.cancel).configure({variant:"secondary",onClick:()=>this.close(false)}));
-    if(this.closeButton)this.buttons.push(new Button(this.closeButton).configure({variant:"secondary",onClick:()=>this.close(false)}));
+    if(this.closeButton)this.buttons.push(new Button(this.closeButton).configure({variant:"ghost",onClick:()=>this.close(false)}));
     this.panel.addEventListener("keydown",event=>{
       if(event.key==="Escape"){event.preventDefault();this.close(false);}
       if(event.key!=="Tab")return;
