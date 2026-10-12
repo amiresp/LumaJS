@@ -184,3 +184,8 @@ renderIcon(document.querySelector('[data-id="status-icon"]'), "circle-check", {s
 ```
 
 Icon is also a standard Luma component with `data-luma="Icon"`, a `core-default` template, `set(name)` and `destroy()`. Toast, Alert, Dialog, Stories and Slider controls now use the locally bundled Tabler icons. See [Icon Reference](docs/icons.md). Keep the original Tabler MIT copyright notice with redistributions.
+
+
+## Starter UI: 11 ready-to-mount components
+
+Run `npm run playground` and visit **http://127.0.0.1:8765/examples/starter/** for EmptyState, Loading/Skeleton, Button, client-side DataGrid/Table, Select (backed by customSelect), Sidebar/Navigation, Breadcrumb, Pagination, Card, Accordion, and Badge/Chip. `GlobalApp` registers them lazily. Every component has `<Name>.js`, `themes/core-default/dependency/Global/<Name>/<Name>.html` and `.css`. Use `[data-id]` for behavior, `data-luma` for component hosts, and preserve the mandatory HTML fallback. APIs/limitations: [Starter Components Guide](docs/starter-components.md). No runtime build or Node.js requirement.
