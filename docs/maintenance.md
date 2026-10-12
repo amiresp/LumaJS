@@ -18,3 +18,8 @@ Starter UI changes must update docs/starter-components.md, README, AGENTS, archi
 
 
 Changes to the root Playground navigation or `examples/admin/` must update README, AGENTS, architecture, migration status, starter component guide and `docs/admin-playground.md`; ensure browser tests cover new links and interactions without logins.
+
+
+## Structural review gate
+
+For each new Feature/Option, check the **Caller ownership boundary**: at most one domain Caller per Feature/Option unless a documented separate bounded context justifies sharing/splitting; zero when no network activity exists. A shared application transport is optional. Reject per-component Callers. Audit newly added JS modules for import-only/re-export-only pass-throughs and reject files lacking their own purpose. Reviewers must verify meaningful responsibilities; static source checks cannot reliably decide architectural necessity. Update AGENTS, architecture and structure guides alongside changes.
