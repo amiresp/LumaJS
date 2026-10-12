@@ -16,7 +16,7 @@ test("GlobalApp registers shared widgets without domain-specific core routes",()
  assert.equal(runtime.registry.has("Alert"),true);
  assert.equal(runtime.registry.has("Stories"),true);
  assert.equal(runtime.registry.has("Hotel"),false);
- app.caller.destroy();
+ assert.equal(Object.hasOwn(app,"caller"),false,"GlobalApp must not own a Caller");
 });
 test("GlobalCaller supports injected adapter and abort",async()=>{
  const caller=new GlobalCaller({base:"https://example.test/ui/",fetcher:async url=>({ok:true,json:async()=>({path:url.pathname})})});
