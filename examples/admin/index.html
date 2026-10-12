@@ -4,8 +4,8 @@
 </style></head><body><div class="shell"><aside class="rail"><div class="brand">LumaJS Admin</div><p><a data-id="home-link" href="/">← Playground home</a></p><div data-luma="Sidebar"></div></aside>
 <main class="content"><header class="top"><div><div data-luma="Breadcrumb"></div><h1>Overview</h1><p class="muted">Sample data only — no login and no backend.</p></div><div class="actions"><div data-luma="Badge"></div><div data-luma="Button"></div></div></header>
 <section class="cards" aria-label="Key metrics"><div class="box"><h2>Total users</h2><div class="metric" data-id="users-value">—</div><div data-luma="Badge"></div></div><div class="box"><h2>Monthly revenue</h2><div class="metric" data-id="revenue-value">—</div><p class="muted">Demo financial data</p></div><div class="box"><h2>Open tickets</h2><div class="metric" data-id="tickets-value">—</div><div data-luma="Badge"></div></div></section>
-<div class="layout"><section class="box demo-table"><h2>Recent users</h2><p class="muted">Search, sort and paginate the mock records.</p><div data-luma="DataGrid"></div><div class="status"><div data-luma="Pagination"></div></div></section>
-<div><section class="box"><h2>Quick controls</h2><p class="muted">Try the independent starter components.</p><div data-luma="Select"></div><div class="actions" style="margin-top:1rem"><button data-id="show-toast" type="button">Show notification</button><button data-id="ask-dialog" type="button" class="secondary">Open dialog</button></div><p data-id="dialog-result" role="status"></p></section>
+<div class="layout"><section class="box demo-table"><h2>Recent users</h2><p class="muted">Search, sort and paginate the mock records.</p><div data-luma="DataGrid"></div></section>
+<div><section class="box"><h2>Quick controls</h2><p class="muted">Try the independent starter components.</p><div data-luma="Select"></div><div class="actions" style="margin-top:1rem"><div data-id="show-toast-action" data-luma="Button"></div><div data-id="ask-dialog-action" data-luma="Button"></div></div><p data-id="dialog-result" role="status"></p></section>
 <section class="box activity"><h2>Help / FAQ</h2><div data-luma="Accordion"></div></section>
 <section class="box activity"><div data-luma="EmptyState"></div></section></div></div>
 <section class="box activity"><h2>Load state</h2><div data-luma="Loading"></div><div data-luma="Card"></div></section>
@@ -39,24 +39,24 @@ get("Button")?.configure({label:"Add sample user",onClick:()=>{
  const id=1000+rows.length+1;
  rows.unshift({id,name:"New User "+id,email:"new"+id+"@example.test",role:"Viewer",status:"Invited"});
  get("DataGrid")?.setRows(rows);
- get("Pagination")?.configure({page:1,total:rows.length,pageSize:4,onChange:page=>get("DataGrid")?.goto(page)});
+
  get("Toast")?.show("Sample user added",{type:"success"});
 }});
 get("DataGrid")?.configure({columns:[{key:"name",label:"Name"},{key:"email",label:"Email"},{key:"role",label:"Role"},{key:"status",label:"Status"}],rows,pageSize:4});
-get("Pagination")?.configure({page:1,total:rows.length,pageSize:4,onChange:page=>get("DataGrid")?.goto(page)});
+
 get("Select")?.configure({options:[{value:"all",text:"All roles"},{value:"admin",text:"Admin"},{value:"editor",text:"Editor"},{value:"viewer",text:"Viewer"}],placeholder:"Role filter",value:"all",onChange:value=>{
  const selected=value==="all"?rows:rows.filter(item=>item.role.toLowerCase()===value);
  get("DataGrid")?.setRows(selected);
- get("Pagination")?.configure({page:1,total:selected.length,pageSize:4,onChange:page=>get("DataGrid")?.goto(page)});
+
 }});
 get("Accordion")?.setItems([{title:"Is this a real backend?",content:"No. All data lives in memory for this demo."},{title:"Can I change the theme?",content:"Yes. Override HTML/CSS in your theme; core-default remains the fallback."},{title:"Do I need Node in production?",content:"No. Node is only the development playground server."}]);
 get("EmptyState")?.show({title:"Inbox is empty",message:"You have no pending messages.",actionText:"Refresh",onAction:()=>get("Toast")?.show("Still no messages",{type:"info"})});
 get("Loading")?.hide();
 get("Card")?.set({title:"Healthy system",text:"All sample services are operational.",footer:"Illustrative status only"});
-document.querySelector('[data-id="show-toast"]').addEventListener("click",()=>get("Toast")?.show("This is a local dashboard notification",{type:"info"}));
-document.querySelector('[data-id="ask-dialog"]').addEventListener("click",async()=>{
+get("Button",1)?.configure({label:"Show notification",onClick:()=>get("Toast")?.show("This is a local dashboard notification",{type:"info"})});
+get("Button",2)?.configure({label:"Open dialog",variant:"secondary",onClick:async()=>{
  const confirmed=await get("Dialog")?.open({title:"Confirm demo action",message:"This action only changes the demo UI."});
  document.querySelector('[data-id="dialog-result"]').textContent=confirmed?"Confirmed":"Cancelled";
-});
+}});
 window.addEventListener("pagehide",()=>void app.destroy(),{once:true});
 </script></body></html>
