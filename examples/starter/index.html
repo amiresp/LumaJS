@@ -9,24 +9,30 @@
 <section class="demo"><h2>Select</h2><div data-luma="Select"></div></section>
 <section class="demo"><h2>DataGrid</h2><div data-luma="DataGrid"></div></section>
 <section class="demo"><h2>Loading</h2><div data-luma="Loading"></div></section>
-<section class="demo"><h2>EmptyState</h2><div data-luma="EmptyState"></div></section></main>
+<section class="demo"><h2>EmptyState</h2><div data-luma="EmptyState"></div></section><section class="demo"><h2>Toast</h2><div data-id="toast-demo-button" data-luma="Button"></div><div data-luma="Toast"></div></section><section class="demo"><h2>Dialog</h2><div data-id="dialog-demo-button" data-luma="Button"></div><div data-luma="Dialog"></div><p data-id="dialog-result" role="status"></p></section><section class="demo"><h2>Alert</h2><div data-luma="Alert"></div><div data-id="alert-demo-button" data-luma="Button"></div></section><section class="demo"><h2>Button variants</h2><div data-id="ghost-demo-button" data-luma="Button"></div></section></main>
 <script type="module">
 import {Luma} from "../../js/core/Luma.js";
 import {GlobalApp} from "../../js/dependency/global/GlobalApp.js";
 const runtime=new Luma({base:"../../"});
 const app=new GlobalApp(runtime);
 await app.mount(document);
-const get=name=>app.get(name);
+const hosts=name=>[...document.querySelectorAll('[data-luma]')].filter(host=>host.dataset.luma===name);
+const get=(name,index=0)=>runtime.instances.get(hosts(name)[index]);
 get("Button")?.configure({label:"Save changes",onClick:()=>get("Badge")?.set({text:"Saved",variant:"success"})});
 get("Badge")?.set({text:"Ready",variant:"success"});
 get("Card")?.set({title:"Welcome",text:"This card uses the core-default theme.",footer:"LumaJS"});
 get("Accordion")?.setItems([{title:"What is LumaJS?",content:"Browser-first components with no required build."},{title:"Theme fallback",content:"Missing theme HTML loads from core-default."}]);
 get("Breadcrumb")?.setItems([{label:"Home",href:"/"},{label:"Starter UI"}]);
 get("Pagination")?.configure({page:1,total:135,pageSize:10,onChange:page=>console.info("Page",page)});
-get("Sidebar")?.setItems([{label:"Home",href:"/",active:true},{label:"Examples",href:"/examples/basic/",children:[{label:"Starter",href:"/examples/starter/"}]}]);
+get("Sidebar")?.setItems([{label:"Home",href:"/"},{label:"Examples",expanded:true,children:[{label:"Components",children:[{label:"Starter",href:"/examples/starter/",active:true},{label:"Basic",href:"/examples/basic/"}]},{label:"Admin",href:"/examples/admin/"},{label:"Icons",href:"/examples/icons/"}]}]);
 get("Select")?.configure({options:[{value:"one",text:"First"},{value:"two",text:"Second"},{value:"three",text:"Third"}],placeholder:"Choose an item"});
 get("DataGrid")?.configure({columns:[{key:"name",label:"Name"},{key:"role",label:"Role"},{key:"score",label:"Score"}],rows:[{name:"Alex",role:"Editor",score:8},{name:"Kim",role:"Admin",score:10},{name:"Sam",role:"Viewer",score:4},{name:"Lee",role:"Editor",score:6}],pageSize:2});
 get("Loading")?.show({mode:"skeleton",message:"Loading preview…"});
 get("EmptyState")?.show({title:"No notifications",message:"Everything is up to date.",actionText:"Refresh",onAction:()=>get("Badge")?.set({text:"Refreshed",variant:"success"})});
+get("Button",1)?.configure({label:"Show toast",onClick:()=>get("Toast")?.show("Saved successfully",{type:"success"})});
+get("Button",2)?.configure({label:"Open dialog",variant:"secondary",onClick:async()=>{const confirmed=await get("Dialog")?.open({title:"Confirm action",message:"Proceed with this demo?"});document.querySelector('[data-id="dialog-result"]').textContent=confirmed?"Confirmed":"Cancelled";}});
+get("Alert")?.show("This is an inline status message",{type:"info"});
+get("Button",3)?.configure({label:"Show alert",onClick:()=>get("Alert")?.show("Everything is working",{type:"success"})});
+get("Button",4)?.configure({label:"Ghost button",variant:"ghost",onClick:()=>get("Toast")?.show("Ghost button clicked")});
 window.addEventListener("pagehide",()=>void app.destroy(),{once:true});
 </script></body></html>
