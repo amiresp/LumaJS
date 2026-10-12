@@ -19,9 +19,9 @@ test("no-login admin dashboard mounts and interacts with actual GlobalComponents
  await page.locator('[data-luma="DataGrid"] [data-id="search"]').fill("Kim");
  await expect(page.locator('[data-luma="DataGrid"] [data-id="row"]')).toHaveCount(1);
  await page.locator('[data-luma="DataGrid"] [data-id="search"]').fill("");
- await page.locator('[data-id="show-toast"]').click();
+ await page.locator('[data-id="show-toast-action"] [data-id="button"]').click();
  await expect(page.locator('[data-luma="Toast"] [data-id="toast"]')).toContainText("dashboard notification");
- await page.locator('[data-id="ask-dialog"]').click();
+ await page.locator('[data-id="ask-dialog-action"] [data-id="button"]').click();
  await expect(page.locator('[data-luma="Dialog"] [data-id="panel"]')).toBeVisible();
  await page.locator('[data-luma="Dialog"] [data-id="confirm"]').click();
  await expect(page.locator('[data-id="dialog-result"]')).toHaveText("Confirmed");
