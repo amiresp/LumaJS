@@ -23,3 +23,8 @@ Run `npm run playground` and navigate to `http://127.0.0.1:8765/examples/starter
 All data labels and cell values use `textContent` rather than injecting arbitrary HTML. DataGrid is **client-side** and intentionally not a server-side grid, virtualized grid or spreadsheet; consumers should transform paged API data themselves. EmptyState, Card and Badge are structural building blocks. Select composes customSelect and does not duplicate its selection logic. No business-specific routes, endpoint assumptions, CSS class selectors for binding, third-party runtime dependencies or automatic global window objects are added.
 
 Themes can override HTML/CSS while preserving required `data-id` hooks; missing themed HTML must fall back to `core-default`. CSS alone is never a reason to duplicate markup. For accessibility, use native buttons, tables and field controls. Review focus handling and RTL/keyboard needs in a real browser before production rollout.
+
+
+## Integrated dashboard demonstration
+
+The zero-login `/examples/admin/` dashboard composes Sidebar, Breadcrumb, Button, Badge, DataGrid, Pagination, Select, Accordion, EmptyState, Loading, Card, Toast and Dialog into a working UI; mock records live in the demo only. The Playground home `/` links to that dashboard and all other examples. See `docs/admin-playground.md` for route and interaction details.
