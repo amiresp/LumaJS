@@ -8,7 +8,7 @@ export class GlobalApp {
   for(const name of MODULES)this.runtime.register(name,{load:()=>import("./GlobalComponents/"+name+"/"+name+".js")});
   this.registered=true;return this;
  }
- async mount(scope=globalThis.document){this.register();return this.runtime.hydrate(scope);}
+ async mount(scope=globalThis.document){this.register();await this.runtime.style("Button");return this.runtime.hydrate(scope);}
  get(name,scope=globalThis.document){const host=scope.querySelector('[data-luma="'+name+'"]');return host?this.runtime.instances.get(host):null;}
  async destroy(scope=globalThis.document){await this.runtime.destroy(scope);this.caller.destroy();}
 }
