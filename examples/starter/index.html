@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LumaJS Starter UI</title><style>body{font:16px system-ui;max-width:1100px;margin:2rem auto;padding:0 1rem;background:#f8fafc;color:#1d2a3b}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:1rem}.demo{background:white;border-radius:.8rem;padding:1.25rem;border:1px solid #e2e8f1}.demo h2{margin-top:0;font-size:1rem}</style></head><body><h1>Starter UI — LumaJS</h1><p>All components use data-id and core-default templates. No runtime build.</p><main><section class="demo"><h2>Button</h2><div data-luma="Button"></div></section>
+<section class="demo"><h2>Badge</h2><div data-luma="Badge"></div></section>
+<section class="demo"><h2>Card</h2><div data-luma="Card"></div></section>
+<section class="demo"><h2>Accordion</h2><div data-luma="Accordion"></div></section>
+<section class="demo"><h2>Breadcrumb</h2><div data-luma="Breadcrumb"></div></section>
+<section class="demo"><h2>Pagination</h2><div data-luma="Pagination"></div></section>
+<section class="demo"><h2>Sidebar</h2><div data-luma="Sidebar"></div></section>
+<section class="demo"><h2>Select</h2><div data-luma="Select"></div></section>
+<section class="demo"><h2>DataGrid</h2><div data-luma="DataGrid"></div></section>
+<section class="demo"><h2>Loading</h2><div data-luma="Loading"></div></section>
+<section class="demo"><h2>EmptyState</h2><div data-luma="EmptyState"></div></section></main>
+<script type="module">
+import {Luma} from "../../js/core/Luma.js";
+import {GlobalApp} from "../../js/dependency/global/GlobalApp.js";
+const runtime=new Luma({base:"../../"});
+const app=new GlobalApp(runtime);
+await app.mount(document);
+const get=name=>app.get(name);
+get("Button")?.configure({label:"Save changes",onClick:()=>get("Badge")?.set({text:"Saved",variant:"success"})});
+get("Badge")?.set({text:"Ready",variant:"success"});
+get("Card")?.set({title:"Welcome",text:"This card uses the core-default theme.",footer:"LumaJS"});
+get("Accordion")?.setItems([{title:"What is LumaJS?",content:"Browser-first components with no required build."},{title:"Theme fallback",content:"Missing theme HTML loads from core-default."}]);
+get("Breadcrumb")?.setItems([{label:"Home",href:"/"},{label:"Starter UI"}]);
+get("Pagination")?.configure({page:1,total:135,pageSize:10,onChange:page=>console.info("Page",page)});
+get("Sidebar")?.setItems([{label:"Home",href:"/",active:true},{label:"Examples",href:"/examples/basic/",children:[{label:"Starter",href:"/examples/starter/"}]}]);
+get("Select")?.configure({options:[{value:"one",text:"First"},{value:"two",text:"Second"},{value:"three",text:"Third"}],placeholder:"Choose an item"});
+get("DataGrid")?.configure({columns:[{key:"name",label:"Name"},{key:"role",label:"Role"},{key:"score",label:"Score"}],rows:[{name:"Alex",role:"Editor",score:8},{name:"Kim",role:"Admin",score:10},{name:"Sam",role:"Viewer",score:4},{name:"Lee",role:"Editor",score:6}],pageSize:2});
+get("Loading")?.show({mode:"skeleton",message:"Loading preview…"});
+get("EmptyState")?.show({title:"No notifications",message:"Everything is up to date.",actionText:"Refresh",onAction:()=>get("Badge")?.set({text:"Refreshed",variant:"success"})});
+window.addEventListener("pagehide",()=>void app.destroy(),{once:true});
+</script></body></html>
