@@ -73,3 +73,10 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Sidebar upgraded from a flat linked list to expandable multilevel navigation with indented groups.
 - /examples/starter/ now showcases Toast, Dialog, Alert, Button variants and nested Sidebar; /examples/admin/ shows nested navigation.
 - Added Chromium coverage for these behaviors and styles.
+
+
+## Caller ownership clarification
+
+- Formalized one domain Caller per networking Feature/Option boundary, rather than a Caller per GlobalComponent. Presentational Features/Options do not require Callers.
+- `GlobalCaller` is a reusable optional transport, not a dependency of every component.
+- Re-export-only/import-only wrappers without an independent architectural responsibility are disallowed. Existing component adapters must justify their behavior/lifecycle.
