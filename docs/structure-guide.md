@@ -20,3 +20,21 @@ npm run playground
 The structure playground includes working Home/Sample pages, Feature/Option instances, and shared Alert through GlobalApp. For production apps, wire Page/Feature/Option templates through application-specific loaders with explicit lifecycle cleanup and fallback policies; this example intentionally avoids a second hidden routing engine. `ApplicationRegistry` already provides app-owned declarative route resolution.
 
 Legacy BindEngine is intentionally **not** migrated. Presentation hooks use `data-id` and JS writes use safe DOM APIs.
+
+
+## Caller ownership rule (mandatory)
+
+```text
+Features/Orders/
+  OrdersApp.js      # owns business orchestration and maps responses into UI inputs
+  OrdersCaller.js   # owns orders-specific API requests (only if needed)
+  components/       # feature-specific UI, no separate Caller per widget
+
+Option/Reports/
+  ReportsApp.js
+  ReportsCaller.js  # only when this Option has independent network responsibilities
+```
+
+Correct flow: `OrdersApp → OrdersCaller → backend`; `OrdersApp → Global DataGrid/Toast/Select`. Incorrect flow: `DataGrid → DataGridCaller`, `Toast → ToastCaller`, or one Caller per row, button or visual element. A display-only Feature requires no Caller. `GlobalCaller` can be reused as a generic transport **inside a Feature Caller** but should not be blindly injected into every component.
+
+Do not add components or files merely to wrap a single import/re-export. Use existing GlobalComponents directly unless the new adapter contributes a verifiable responsibility (behavior, lifecycle, state, domain composition, configuration, or theme presentation). This applies equally to Feature, Option and Page scaffolding.
