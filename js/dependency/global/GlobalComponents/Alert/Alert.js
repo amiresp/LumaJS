@@ -1,3 +1,4 @@
+import {Button} from "../Button/Button.js";
 import {createIconElement,renderIcon} from "../Icon/Icon.js";
 /** Inline dismissible status; safe text-only API. */
 export class Alert {
@@ -8,7 +9,7 @@ export class Alert {
     this.dismiss=root.querySelector('[data-id="dismiss"]');
     if(this.dismiss){this.dismiss.replaceChildren(createIconElement("x",{documentRef:root.ownerDocument,size:18}));}
     this.controller=new (root.ownerDocument.defaultView?.AbortController||AbortController)();
-    this.dismiss?.addEventListener("click",()=>this.hide(),{signal:this.controller.signal});
+    this.dismissButton=this.dismiss?new Button(this.dismiss).configure({variant:"secondary",onClick:()=>this.hide()}):null;
     this.hide();
   }
   show(message,{type="info",dismissible=true}={}){
@@ -22,6 +23,6 @@ export class Alert {
     this.panel.hidden=false;
   }
   hide(){this.panel.hidden=true;}
-  destroy(){if(this.destroyed)return;this.destroyed=true;this.controller.abort();this.hide();}
+  destroy(){if(this.destroyed)return;this.destroyed=true;this.controller.abort();this.dismissButton?.destroy();this.hide();}
 }
 export function create(root){return new Alert(root);}
