@@ -56,3 +56,11 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Added a root `index.html` hub linking starter components, the admin dashboard, the existing media/feedback demo, icons, architecture, customSelect, and the offline page.
 - Added a no-login admin dashboard in `examples/admin/` using existing GlobalComponents and in-memory example data, with browser interaction coverage.
 - This is a showcase of composition, not a port of a specific legacy admin backend. All example user data and metric values are fictional.
+
+
+## Shared component consistency fixes
+
+- DataGrid pagination now delegates to the shared Pagination class, and header sort actions use Button.
+- Dialog, Toast, Alert, Badge, EmptyState and Sidebar now reuse shared Button instances.
+- Select automatically loads customSelect.css and disposes its owned stylesheet when no Select instances remain.
+- Admin dashboard switched to global Button instances for quick actions and removed redundant external Pagination for the grid. Browser regression tests and data-id hooks retained.
