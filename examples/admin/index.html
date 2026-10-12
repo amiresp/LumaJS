@@ -27,7 +27,7 @@ const rows=[
 {id:1006,name:"Robin Patel",email:"robin@example.test",role:"Editor",status:"Active"},
 {id:1007,name:"Morgan Diaz",email:"morgan@example.test",role:"Admin",status:"Active"}
 ];
-get("Sidebar")?.setItems([{label:"Overview",href:"/examples/admin/",active:true},{label:"UI components",href:"/examples/starter/"},{label:"Components demo",href:"/examples/basic/"},{label:"Icons",href:"/examples/icons/"},{label:"Architecture",href:"/examples/structure/"}]);
+get("Sidebar")?.setItems([{label:"Overview",href:"/examples/admin/",active:true},{label:"UI library",expanded:true,children:[{label:"Components",expanded:true,children:[{label:"Starter kit",href:"/examples/starter/"},{label:"Slider and Stories",href:"/examples/basic/"}]},{label:"Icon gallery",href:"/examples/icons/"},{label:"customSelect",href:"/examples/custom-select/"}]},{label:"Architecture",expanded:false,children:[{label:"Feature / Option / Pages",href:"/examples/structure/"}]}]);
 get("Breadcrumb")?.setItems([{label:"Playground",href:"/"},{label:"Admin"}]);
 get("Badge",0)?.set({text:"Demo mode",variant:"success"});
 get("Badge",1)?.set({text:"↑ 12% this month",variant:"success"});
