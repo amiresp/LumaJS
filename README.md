@@ -194,3 +194,8 @@ Run `npm run playground` and visit **http://127.0.0.1:8765/examples/starter/** f
 ## Playground landing page and no-login admin demo
 
 After `npm run playground`, open **http://127.0.0.1:8765/** for the main Playground landing page. It links to Starter UI, the component demo (Toast, Slider, Stories), Tabler icons, customSelect, Feature/Option/Page architecture, and offline preview. The new **Admin Dashboard** is at **http://127.0.0.1:8765/examples/admin/**. No account, login page, backend or database is required. It demonstrates shared Sidebar/Breadcrumb, Card, Badge, DataGrid, Pagination, customSelect-backed Select, Button, Accordion, Loading, EmptyState, Toast and Dialog using mock users and illustrative metrics. Clicking Add Sample User mutates only in-memory data. See [Dashboard demo documentation](docs/admin-playground.md).
+
+
+## Shared component composition (October 2026)
+
+Composite UI now reuses the actual GlobalComponents rather than reimplementing buttons and pagination. DataGrid creates a nested **Pagination instance** and uses shared Button controls for sortable columns; configure DataGrid with rows/columns/pageSize and **do not mount a second independent Pagination for that grid**. Dialog, Toast, Alert, Badge, EmptyState and Sidebar use the shared Button behavior for their actions. Select wraps the existing customSelect and automatically loads its stylesheet from the module-relative path so it works in any Playground or deployment prefix. See docs/starter-components.md. Run npm run playground, open /examples/admin/ and /examples/starter/, then npm run check and npm run test:browser.
