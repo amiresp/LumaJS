@@ -36,3 +36,36 @@ test("Dialog, toast and dashboard quick actions compose Button behavior",async({
  await page.locator('[data-luma="Dialog"] [data-id="cancel"]').click();
  await expect(page.locator('[data-luma="Dialog"] [data-id="panel"]')).toBeHidden();
 });
+
+test("grid headers are plain keyboard-sortable labels, not buttons",async({page})=>{
+ await page.goto("/examples/starter/");
+ const grid=page.locator('[data-luma="DataGrid"]');
+ await expect(grid.locator('thead [data-id="sort"]')).toHaveCount(3);
+ await expect(grid.locator('thead button')).toHaveCount(0);
+ await grid.locator('[data-id="sort"]').first().focus();
+ await page.keyboard.press("Enter");
+ await expect(grid.locator('th[aria-sort]')).toHaveCount(1);
+});
+test("toast close button is background-free and starter page demos feedback",async({page})=>{
+ await page.goto("/examples/starter/");
+ await expect(page.locator('[data-luma="Dialog"]')).toHaveAttribute("data-load-state","ready");
+ await expect(page.locator('[data-luma="Alert"]')).toHaveAttribute("data-load-state","ready");
+ await page.locator('[data-id="toast-demo-button"] [data-id="button"]').click();
+ const dismiss=page.locator('[data-luma="Toast"] [data-id="dismiss"]');
+ await expect(dismiss).toHaveAttribute("data-variant","ghost");
+ await expect(dismiss).toHaveCSS("background-color","rgba(0, 0, 0, 0)");
+ await dismiss.click();
+ await expect(page.locator('[data-luma="Toast"] [data-id="toast"]')).toHaveCount(0);
+ await page.locator('[data-id="dialog-demo-button"] [data-id="button"]').click();
+ await expect(page.locator('[data-luma="Dialog"] [data-id="panel"]')).toBeVisible();
+});
+test("sidebar groups are nested and can expand with keyboard",async({page})=>{
+ await page.goto("/examples/admin/");
+ const sidebar=page.locator('[data-luma="Sidebar"]');
+ await expect(sidebar.locator('[data-id="children"]')).toHaveCount(3);
+ const toggle=sidebar.locator('[data-id="expand"]').last();
+ await expect(toggle).toHaveAttribute("aria-expanded","false");
+ await toggle.focus();await page.keyboard.press("Enter");
+ await expect(toggle).toHaveAttribute("aria-expanded","true");
+ await expect(sidebar.locator('[data-id="children"]').last()).toBeVisible();
+});
