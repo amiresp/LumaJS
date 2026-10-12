@@ -1,6 +1,6 @@
 /** Global UI composition, outside Core; no business routes. */
 import {GlobalCaller} from "./GlobalCaller.js";
-const MODULES=["Toast","Alert","Dialog","Slider","Stories","Icon"];
+const MODULES=["Toast","Alert","Dialog","Slider","Stories","Icon","EmptyState","Loading","Button","Card","Badge","Accordion","Breadcrumb","Pagination","Sidebar","Select","DataGrid"];
 export class GlobalApp {
  constructor(runtime,{caller=new GlobalCaller()}={}){this.runtime=runtime;this.caller=caller;this.registered=false;}
  register(){
