@@ -199,3 +199,8 @@ After `npm run playground`, open **http://127.0.0.1:8765/** for the main Playgro
 ## Shared component composition (October 2026)
 
 Composite UI now reuses the actual GlobalComponents rather than reimplementing buttons and pagination. DataGrid creates a nested **Pagination instance** and uses shared Button controls for sortable columns; configure DataGrid with rows/columns/pageSize and **do not mount a second independent Pagination for that grid**. Dialog, Toast, Alert, Badge, EmptyState and Sidebar use the shared Button behavior for their actions. Select wraps the existing customSelect and automatically loads its stylesheet from the module-relative path so it works in any Playground or deployment prefix. See docs/starter-components.md. Run npm run playground, open /examples/admin/ and /examples/starter/, then npm run check and npm run test:browser.
+
+
+### Starter UI refinements
+
+The `/examples/starter/` catalog now showcases Toast, Dialog, Alert and ghost Button variants alongside the original components. DataGrid column headings render a plain focusable sorting label (`data-id=sort`), not a styled Button; Enter/Space and pointer activation sort the table. Buttons used only as dismiss icons use the background-free `ghost` variant, including Toast and dialog Close. Sidebar supports expandable nested navigation (`children`, `expanded`, `active`) with keyboard-operable controls and polished indentation. The admin demo includes two nesting levels. Verify with `npm run check` and `npm run test:browser`.
