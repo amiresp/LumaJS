@@ -2,8 +2,8 @@ import {test,expect} from "@playwright/test";
 test("all starter components hydrate and core interactions work",async({page})=>{
  await page.goto("/examples/starter/");
  for(const name of ["EmptyState","Loading","Button","Card","Badge","Accordion","Breadcrumb","Pagination","Sidebar","Select","DataGrid"])
-  await expect(page.locator('[data-luma="'+name+'"]')).toHaveAttribute("data-load-state","ready");
- await page.locator('[data-luma="Button"] [data-id="button"]').click();
+  await expect(page.locator('[data-luma="'+name+'"]').first()).toHaveAttribute("data-load-state","ready");
+ await page.locator('[data-luma="Button"] [data-id="button"]').first().click();
  await expect(page.locator('[data-luma="Badge"] [data-id="label"]')).toHaveText("Saved");
  await page.locator('[data-luma="Accordion"] [data-id="toggle"]').first().click();
  await expect(page.locator('[data-luma="Accordion"] [data-id="panel"]').first()).toBeVisible();
