@@ -204,3 +204,8 @@ Composite UI now reuses the actual GlobalComponents rather than reimplementing b
 ### Starter UI refinements
 
 The `/examples/starter/` catalog now showcases Toast, Dialog, Alert and ghost Button variants alongside the original components. DataGrid column headings render a plain focusable sorting label (`data-id=sort`), not a styled Button; Enter/Space and pointer activation sort the table. Buttons used only as dismiss icons use the background-free `ghost` variant, including Toast and dialog Close. Sidebar supports expandable nested navigation (`children`, `expanded`, `active`) with keyboard-operable controls and polished indentation. The admin demo includes two nesting levels. Verify with `npm run check` and `npm run test:browser`.
+
+
+## Caller and module ownership rules
+
+**Use a Caller at the Feature boundary, not on every component.** A Feature that loads business data owns a domain Caller; an Option may have its own only if its network/domain requirements justify it. The Feature prepares data and passes it to shared components such as DataGrid, Select and Toast. Display-only features need no Caller. `GlobalCaller` is an optional application-level HTTP helper, not a mandatory wrapper for widgets. Never create an import-only component/file that simply forwards an existing one—reuse it directly unless your new adapter has real behavior, state, lifecycle or a defined presentation responsibility. See [structure guide](docs/structure-guide.md) and [contributor rules](AGENTS.md).
