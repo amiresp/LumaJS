@@ -64,3 +64,12 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Dialog, Toast, Alert, Badge, EmptyState and Sidebar now reuse shared Button instances.
 - Select automatically loads customSelect.css and disposes its owned stylesheet when no Select instances remain.
 - Admin dashboard switched to global Button instances for quick actions and removed redundant external Pagination for the grid. Browser regression tests and data-id hooks retained.
+
+
+## Starter UI layout and behavior corrections
+
+- DataGrid sort headers are plain keyboard-accessible div labels with aria-sort on TH, instead of decorated primary buttons.
+- Button supports ghost/bare backgrounds; Toast, Alert, Dialog icon-close controls use ghost.
+- Sidebar upgraded from a flat linked list to expandable multilevel navigation with indented groups.
+- /examples/starter/ now showcases Toast, Dialog, Alert, Button variants and nested Sidebar; /examples/admin/ shows nested navigation.
+- Added Chromium coverage for these behaviors and styles.
