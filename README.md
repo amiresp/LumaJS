@@ -227,3 +227,8 @@ Import `logger` or `Logger` from [`js/shared/Logger.js`](js/shared/Logger.js): `
 ### Configuring Logger at the entry point
 
 Use `const {logger}=createWebsite({logging:{level:"warn",enabled:true}})` or the equivalent `createAdmin` bootstrap. The returned Logger lets application code call `logger.setLevel("debug")`, `logger.setEnabled(false)` or `logger.setEnabled(true)` without modifying Core or Page files. Both application bootstraps report Luma runtime errors through this shared Logger while retaining any supplied `onError` callback. See [Logger usage and runtime limitations](docs/logger.md).
+
+
+## Consumer architecture contract
+
+The proposed 13-section contract was reviewed against the actual LumaJS source. Adopted rules and corrections: docs/consumer-architecture-contract.md. Consumer Core must match a pinned upstream revision. Page is presentation-only; Caller belongs to Feature/Option orchestration. No standalone Renderer is required. New consumer markup belongs to Theme templates, including repeated HTML template fragments. Existing framework internals still include dynamic DOM construction and require a separate migration before any blanket compliance claim. Backend remains the authority for business policy and tenant permissions.
