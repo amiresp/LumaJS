@@ -79,3 +79,8 @@ Pages receive prepared view models and UI action callbacks from their owning Fea
 ## Rendering ownership (no separate Renderer layer)
 
 LumaJS has no standalone Renderer/Rendering tier. A Feature/Option obtains and prepares data; a Page presents the supplied view model and composes GlobalComponents; each UI component renders its own state. Local `render()` methods are normal. Avoid `FeatureRenderer.js`, `PageRenderer.js` or one-line rendering forwarding modules: they add an unnecessary layer. An independently useful rendering infrastructure would need explicit architectural justification and tests, not automatic scaffolding.
+
+
+## Shared diagnostic Logger
+
+A single optional, dependency-free logger exists in `js/shared/Logger.js`. It is not a Caller, Renderer, component, or Core dependency. Features/Options/apps import the utility directly for scoped diagnostics. Logging does not retrieve data and the host application controls the configured threshold. The existing Luma `onError` hook remains application-configurable and can forward to the Logger at bootstrap. See `docs/logger.md`.
