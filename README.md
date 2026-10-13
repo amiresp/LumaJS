@@ -217,3 +217,8 @@ The `/examples/starter/` catalog now showcases Toast, Dialog, Alert and ghost Bu
 
 
 **Rendering convention:** LumaJS has no separate Renderer/Rendering layer. Feature/Option orchestration prepares view models; Pages and GlobalComponents render them directly. `render()` methods inside these classes are allowed, but do not scaffold `*Renderer.js` proxy files or extra wrappers. See [architecture](docs/architecture.md).
+
+
+## Shared Logger
+
+Import `logger` or `Logger` from [`js/shared/Logger.js`](js/shared/Logger.js): `logger.info('Ready')`, `logger.warn('Empty')`, `logger.error('Failed',error)`, and `logger.debug('State',state)`. Debug is off by default; call `logger.setLevel('debug')` for local debugging and `logger.setLevel('warn')` or `logger.setLevel('silent')` for production. An optional `Logger({prefix,level,sink,enabled})` gives scoped or customized output. No extra Caller, component wrapper, Core changes or runtime dependencies. See [Logger guide](docs/logger.md).
