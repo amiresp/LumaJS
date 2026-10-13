@@ -82,3 +82,9 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Re-export-only/import-only wrappers without an independent architectural responsibility are disallowed. Existing component adapters must justify their behavior/lifecycle.
 
 **Core reference audit (2026-10-12):** Inspected `js/core/` history; no new Core changes since the original 2026-10-11 foundational work. Experimental BindEngine remains removed. Removed implicit `GlobalCaller` construction and disposal from `GlobalApp`, with regression test ensuring UI orchestration is Caller-free. No Core revert was performed.
+
+
+## Renderer convention
+
+- Confirmed no standalone Renderer/Rendering files in `main`; adopted a rule prohibiting unnecessary Renderer layers.
+- Local Page/GlobalComponent `render()` methods remain valid; Feature/Option owns data preparation and Pages remain presentation-only.
