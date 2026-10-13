@@ -25,3 +25,6 @@ Changes to the root Playground navigation or `examples/admin/` must update READM
 For each new Feature/Option, check the **Caller ownership boundary**: at most one domain Caller per Feature/Option unless a documented separate bounded context justifies sharing/splitting; zero when no network activity exists. A shared application transport is optional. Reject per-component Callers. Audit newly added JS modules for import-only/re-export-only pass-throughs and reject files lacking their own purpose. Reviewers must verify meaningful responsibilities; static source checks cannot reliably decide architectural necessity. Update AGENTS, architecture and structure guides alongside changes.
 
 **Core preservation audit:** Before changing `js/core/`, compare behavior with the existing main reference and run focused lifecycle/fallback tests. Do not modify Core for Feature-level Caller plumbing. Assert `GlobalApp` remains Caller-free in automated tests.
+
+
+**Page presentation-only review:** Reject Page modules that import/instantiate Callers or HTTP clients, perform fetch/API calls, normalize network responses, or own data loading. Feature/Option/application orchestration supplies view models and callbacks. Never create a PageCaller file. Test rendering from supplied data independently of networking.
