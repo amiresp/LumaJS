@@ -102,3 +102,8 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Added Logger integration to website and admin application bootstraps without modifying `js/core`.
 - Application consumers can toggle the shared logger externally through `logging: {level,enabled}` and the returned `logger`.
 - Luma runtime errors go through the logger and still reach the optional custom `onError` handler; coverage added to application unit tests.
+
+
+## Consumer contract review
+
+The proposed 13-section architecture policy was evaluated and recorded in docs/consumer-architecture-contract.md. Consumer Core pinning, presentation-only Pages, Caller ownership, explicit component mounting, required/optional template hooks and server-side business authority are adopted. The stricter no-created-HTML application guideline does not mean every existing framework component already complies; existing dynamic DOM remains a future migration. DatePicker and ErrorState are not yet shipped global components.
