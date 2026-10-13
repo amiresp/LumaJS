@@ -40,3 +40,8 @@ Correct flow: `OrdersApp → OrdersCaller → backend`; `OrdersApp → Global Da
 Do not add components or files merely to wrap a single import/re-export. Use existing GlobalComponents directly unless the new adapter contributes a verifiable responsibility (behavior, lifecycle, state, domain composition, configuration, or theme presentation). This applies equally to Feature, Option and Page scaffolding.
 
 **Implementation update:** `GlobalApp` now registers/hydrates UI components without constructing, retaining, or destroying `GlobalCaller`. Networking Feature/Option owners create and dispose their own domain Caller when network access is actually needed; display-only modules create none.
+
+
+## Page boundary: presentation only
+
+Pages under `apps/<app>/pages/`, `js/Features/<name>/pages/` and `js/Option/<name>/pages/` **must not** contain a Caller, import Callers or HTTP clients, use `fetch`, load business records, or normalize backend responses. The owning Feature/Option (or application orchestrator) fetches and maps data and passes ready-to-render view models and callbacks. Pages render and emit UI intent only. The required flow is `FeatureCaller -> FeatureApp -> Page(viewModel, actions)`. Do not create `PageCaller.js`.
