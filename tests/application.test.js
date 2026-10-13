@@ -26,3 +26,29 @@ test("features, options and callers are explicit and independent from Core", asy
   assert.equal(app.resolve("/hello").page, "Hello");
   assert.throws(() => app.addRoutes([{ path: "/hello" }]), /Duplicate/);
 });
+
+test("application bootstrap reports runtime errors through externally configurable logger",()=>{
+ const {logger}=createWebsite({logging:{level:"silent",enabled:true}});
+ const saved={level:logger.level,enabled:logger.enabled,sink:logger.sink};
+ const entries=[];
+ try {
+  logger.sink={error:(...args)=>entries.push(args),debug:()=>{}};
+  const called=[];
+  const {runtime,logger:shared}=createAdmin({logging:{level:"error",enabled:true},onError:(error,host)=>called.push([error,host])});
+  assert.equal(shared,logger);
+  const error=new Error("mount failed"),host={dataset:{luma:"DataGrid"}};
+  runtime.onError(error,host);
+  assert.deepEqual(entries,[["[LumaJS]","admin","DataGrid",error]]);
+  assert.deepEqual(called,[[error,host]]);
+  logger.setEnabled(false);
+  runtime.onError(error,host);
+  assert.equal(entries.length,1);
+  assert.equal(called.length,2);
+  logger.setEnabled(true).setLevel("silent");
+  runtime.onError(error,host);
+  assert.equal(entries.length,1);
+  assert.equal(called.length,3);
+ }finally{
+  logger.sink=saved.sink;logger.setLevel(saved.level).setEnabled(saved.enabled);
+ }
+});
