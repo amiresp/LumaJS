@@ -70,3 +70,8 @@ A UI component has no dedicated Caller. If it needs data, the owning Feature/Opt
 
 
 **No standalone Renderer:** Put presentation rendering logic in the Page or Component's existing implementation; a local `render()` method is fine. Do not create a separate `CounterRenderer.js` merely to forward rendered content, nor require a Renderer between the Feature and Page. Preserve the `data-id` contract and lifecycle ownership.
+
+
+## Consumer UI template discipline
+
+New consuming-app components should define their structure in Theme HTML and use HTML template fragments for repeated rows/items. Component JS clones template content, updates data-id hooks, attaches events and implements destroy; it must not scaffold an application layout with dynamically created elements or HTML strings. Document Required selectors that throw on absence and Optional selectors guarded by JS. This is a consumer authoring rule; existing framework-internal DOM generation has not been migrated wholesale. See docs/consumer-architecture-contract.md.
