@@ -89,3 +89,8 @@ A single optional, dependency-free logger exists in `js/shared/Logger.js`. It is
 ## Application-bootstrap logging boundary
 
 `createWebsite` and `createAdmin` use the shared Logger directly to report Luma runtime errors via `onError`; they preserve optional external `onError` callbacks and expose `logger` in their returned object. They accept `logging: {level, enabled}` at bootstrap, and consumers can subsequently toggle the shared singleton via `setLevel` or `setEnabled`. Core, Pages and GlobalComponents remain independent of the logging utility. No global error trap is installed. See `docs/logger.md`.
+
+
+## Consumer architecture contract
+
+See docs/consumer-architecture-contract.md for the review of the 13 proposed sections. Core is immutable in consuming applications but maintainers may change upstream framework Core via reviewed tests. Pages render supplied view models; networking and business logic remain in Feature/Option orchestration. There is no standalone Renderer tier. New consumer component layouts belong to Theme HTML and CSS, with template cloning for repeated elements; existing framework-internal dynamic DOM is an explicit migration exception. Only currently implemented GlobalComponents can be claimed as available.
