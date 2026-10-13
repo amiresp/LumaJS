@@ -28,3 +28,6 @@ For each new Feature/Option, check the **Caller ownership boundary**: at most on
 
 
 **Page presentation-only review:** Reject Page modules that import/instantiate Callers or HTTP clients, perform fetch/API calls, normalize network responses, or own data loading. Feature/Option/application orchestration supplies view models and callbacks. Never create a PageCaller file. Test rendering from supplied data independently of networking.
+
+
+**Renderer review rule:** Reject added `*Renderer.js`/`Rendering.js` layers that merely duplicate Page or Component rendering responsibilities. The supported default is Feature/Option -> Page -> GlobalComponents/Theme, with local `render()` methods. A genuinely independent rendering engine requires explicit design justification and tests.
