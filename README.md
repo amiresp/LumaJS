@@ -222,3 +222,8 @@ The `/examples/starter/` catalog now showcases Toast, Dialog, Alert and ghost Bu
 ## Shared Logger
 
 Import `logger` or `Logger` from [`js/shared/Logger.js`](js/shared/Logger.js): `logger.info('Ready')`, `logger.warn('Empty')`, `logger.error('Failed',error)`, and `logger.debug('State',state)`. Debug is off by default; call `logger.setLevel('debug')` for local debugging and `logger.setLevel('warn')` or `logger.setLevel('silent')` for production. An optional `Logger({prefix,level,sink,enabled})` gives scoped or customized output. No extra Caller, component wrapper, Core changes or runtime dependencies. See [Logger guide](docs/logger.md).
+
+
+### Configuring Logger at the entry point
+
+Use `const {logger}=createWebsite({logging:{level:"warn",enabled:true}})` or the equivalent `createAdmin` bootstrap. The returned Logger lets application code call `logger.setLevel("debug")`, `logger.setEnabled(false)` or `logger.setEnabled(true)` without modifying Core or Page files. Both application bootstraps report Luma runtime errors through this shared Logger while retaining any supplied `onError` callback. See [Logger usage and runtime limitations](docs/logger.md).
