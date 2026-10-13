@@ -31,3 +31,6 @@ For each new Feature/Option, check the **Caller ownership boundary**: at most on
 
 
 **Renderer review rule:** Reject added `*Renderer.js`/`Rendering.js` layers that merely duplicate Page or Component rendering responsibilities. The supported default is Feature/Option -> Page -> GlobalComponents/Theme, with local `render()` methods. A genuinely independent rendering engine requires explicit design justification and tests.
+
+
+Logger changes must update docs/logger.md, README.md, AGENTS.md, architecture, migration status and behavior tests. Logging must avoid sensitive payloads and remain optional for Core; do not introduce import-only wrappers or per-component Callers.
