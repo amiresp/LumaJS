@@ -34,3 +34,6 @@ For each new Feature/Option, check the **Caller ownership boundary**: at most on
 
 
 Logger changes must update docs/logger.md, README.md, AGENTS.md, architecture, migration status and behavior tests. Logging must avoid sensitive payloads and remain optional for Core; do not introduce import-only wrappers or per-component Callers.
+
+
+For logging integration, keep the wiring in application bootstraps, ensure custom onError callbacks still fire when Logger is disabled, and add regression tests for external level/enabled controls. Avoid configuring logging from Pages or Core. See docs/logger.md.
