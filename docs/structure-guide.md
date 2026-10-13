@@ -50,3 +50,8 @@ Pages under `apps/<app>/pages/`, `js/Features/<name>/pages/` and `js/Option/<nam
 ## No Renderer file convention
 
 Use `FeatureCaller -> FeatureApp -> Page -> GlobalComponents/Theme`. Do not scaffold `FeatureRenderer.js`, `PageRenderer.js` or a separate Rendering directory. Pages and components own rendering of supplied data using `data-id`, safe DOM APIs, and local `render()` methods when appropriate. Features/Options own domain orchestration, not a duplicate presentation layer.
+
+
+## Consumer applications
+
+Pin the upstream Core version and do not patch consumer Core. Pages explicitly compose data-luma components from Theme markup, using data supplied by Feature/Option orchestration. Callers belong to Feature/Option, not Pages or components. No standalone Renderer, inferred feature injection or pass-through wrappers. For new consumer UI, use Theme HTML templates for repeated markup. See docs/consumer-architecture-contract.md.
