@@ -64,3 +64,6 @@ For a control, import `createIconElement` from `../Icon/Icon.js` (adjust relativ
 ## When **not** to create a component or Caller
 
 A UI component has no dedicated Caller. If it needs data, the owning Feature/Option retrieves it using its **one domain Caller when needed**, normalizes it, then calls the component API (`setRows`, `setItems`, `configure`, etc.). Do not create `CounterCaller.js` for this Counter. Do not create a new Component or Adapter if its entire contents merely import and re-export an existing module. A new file must own actual state, lifecycle, domain orchestration, behavior or intentional UI presentation. Reuse the original component directly when no such responsibility exists. See `docs/structure-guide.md`.
+
+
+**Page rule:** A Page must be a pure presentation boundary. Never add a PageCaller, fetch/API code or HTTP client import to a Page. Receive prepared data and callbacks from the Feature/Option orchestrator; use data-id for UI hooks.
