@@ -69,3 +69,8 @@ The unit of ownership for remote data is the **Feature/Option**, not a GlobalCom
 An import-and-re-export-only module or one-line component forwarding an existing implementation without additional lifecycle, behavior, adapter boundary or tested presentation is architectural waste and must not be added. Legitimate component adapters must perform meaningful work (for example: Select owns stylesheet lifecycle and exposes a stable widget API). Registry lazy-import callbacks are registration logic, not wrapper files. See `AGENTS.md` rules 29–30 and `docs/structure-guide.md`.
 
 **Current state clarification:** Core does include `RouteResolver`, `LibraryManager` and `HttpClient`, plus optional offline support outside Core; earlier alpha scope notes above describing those items as absent are historical and superseded. `GlobalApp` does not own or automatically instantiate any Caller. Caller ownership is strictly at networking Feature/Option boundaries; `GlobalCaller` is an opt-in generic transport helper.
+
+
+## Pages are exclusively presentational
+
+Pages receive prepared view models and UI action callbacks from their owning Feature, Option, or application orchestrator. A Page renders this supplied state with data-id hooks and cleans up presentation listeners only. It must never import, instantiate, call, or dispose a Caller, fetch business data, use an HTTP client, or map backend responses. Correct flow: OrdersCaller -> OrdersApp -> OrdersPage.render(viewModel, actions). A Page may emit navigation intent but does not retrieve its next page's business records.
