@@ -214,3 +214,6 @@ The `/examples/starter/` catalog now showcases Toast, Dialog, Alert and ghost Bu
 
 
 **Pages are views only:** They must not instantiate/import Callers, fetch business data, or directly contact APIs. The owning Feature, Option, or application orchestrator prepares a view model and passes it with UI callbacks to the Page. Pages render the supplied state and dispose presentation listeners. See docs/structure-guide.md.
+
+
+**Rendering convention:** LumaJS has no separate Renderer/Rendering layer. Feature/Option orchestration prepares view models; Pages and GlobalComponents render them directly. `render()` methods inside these classes are allowed, but do not scaffold `*Renderer.js` proxy files or extra wrappers. See [architecture](docs/architecture.md).
