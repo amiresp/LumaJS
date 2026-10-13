@@ -74,3 +74,8 @@ An import-and-re-export-only module or one-line component forwarding an existing
 ## Pages are exclusively presentational
 
 Pages receive prepared view models and UI action callbacks from their owning Feature, Option, or application orchestrator. A Page renders this supplied state with data-id hooks and cleans up presentation listeners only. It must never import, instantiate, call, or dispose a Caller, fetch business data, use an HTTP client, or map backend responses. Correct flow: OrdersCaller -> OrdersApp -> OrdersPage.render(viewModel, actions). A Page may emit navigation intent but does not retrieve its next page's business records.
+
+
+## Rendering ownership (no separate Renderer layer)
+
+LumaJS has no standalone Renderer/Rendering tier. A Feature/Option obtains and prepares data; a Page presents the supplied view model and composes GlobalComponents; each UI component renders its own state. Local `render()` methods are normal. Avoid `FeatureRenderer.js`, `PageRenderer.js` or one-line rendering forwarding modules: they add an unnecessary layer. An independently useful rendering infrastructure would need explicit architectural justification and tests, not automatic scaffolding.
