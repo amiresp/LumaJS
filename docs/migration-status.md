@@ -95,3 +95,10 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 - Added a direct-import, dependency-free `js/shared/Logger.js` with debug/info/warn/error/silent levels, optional scoped instances and custom sinks.
 - No dedicated Logger component, Caller, Renderer or Core modification. The existing Luma `onError` hook stays intact.
 - Added isolated unit tests and a usage guide in docs/logger.md.
+
+
+## Application Logger hookup
+
+- Added Logger integration to website and admin application bootstraps without modifying `js/core`.
+- Application consumers can toggle the shared logger externally through `logging: {level,enabled}` and the returned `logger`.
+- Luma runtime errors go through the logger and still reach the optional custom `onError` handler; coverage added to application unit tests.
