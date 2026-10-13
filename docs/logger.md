@@ -31,3 +31,23 @@ const runtime=new Luma({onError:(error,host)=>logger.error(host?.dataset?.luma??
 ```
 
 See `tests/logger.test.js` for filtering, logger scopes, custom sink and error cases.
+
+
+## Where to configure the Logger
+
+**Set log level at application bootstrap**, not inside Pages, Callers, GlobalComponents, or Core. `apps/website/bootstrap.js` and `apps/admin/bootstrap.js` already attach their Luma runtime `onError` hook to the shared logger. The bootstrap returns `{runtime,app,logger}`, so it is controllable by the entry point without directly modifying Core.
+
+```js
+import {createAdmin} from "/apps/admin/bootstrap.js";
+const {runtime,app,logger} = createAdmin({
+  logging: {level:"warn",enabled:true},
+  onError(error,host){ /* optional additional error handler */ }
+});
+logger.setLevel("debug");  // enable debug from application code
+logger.setEnabled(false); // turn logging off entirely
+logger.setEnabled(true).setLevel("error"); // only errors
+```
+
+For a website, use `createWebsite({logging:{level:"warn",enabled:true}})`. If `logging` is omitted, the existing shared Logger configuration is preserved (its default is `info`). Runtime/component errors are always passed to a supplied `onError`, even when logging is disabled. Each bootstrap uses the same exported singleton, so settings are **shared across apps on the same page**; do not expect per-app isolation. To configure the singleton before bootstrap, import `logger` directly and call `setLevel`/`setEnabled`.
+
+The app bootstrap logs initialization at `debug`; runtime errors are logged at `error`, including component name when available. It does not automatically intercept all console messages, global unhandled exceptions, or Caller network failures. Explicit Feature logging is appropriate at the Feature orchestration level and should exclude secrets and user data.
