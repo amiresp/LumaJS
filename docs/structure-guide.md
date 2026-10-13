@@ -45,3 +45,8 @@ Do not add components or files merely to wrap a single import/re-export. Use exi
 ## Page boundary: presentation only
 
 Pages under `apps/<app>/pages/`, `js/Features/<name>/pages/` and `js/Option/<name>/pages/` **must not** contain a Caller, import Callers or HTTP clients, use `fetch`, load business records, or normalize backend responses. The owning Feature/Option (or application orchestrator) fetches and maps data and passes ready-to-render view models and callbacks. Pages render and emit UI intent only. The required flow is `FeatureCaller -> FeatureApp -> Page(viewModel, actions)`. Do not create `PageCaller.js`.
+
+
+## No Renderer file convention
+
+Use `FeatureCaller -> FeatureApp -> Page -> GlobalComponents/Theme`. Do not scaffold `FeatureRenderer.js`, `PageRenderer.js` or a separate Rendering directory. Pages and components own rendering of supplied data using `data-id`, safe DOM APIs, and local `render()` methods when appropriate. Features/Options own domain orchestration, not a duplicate presentation layer.
