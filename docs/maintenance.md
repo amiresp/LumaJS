@@ -37,3 +37,6 @@ Logger changes must update docs/logger.md, README.md, AGENTS.md, architecture, m
 
 
 For logging integration, keep the wiring in application bootstraps, ensure custom onError callbacks still fire when Logger is disabled, and add regression tests for external level/enabled controls. Avoid configuring logging from Pages or Core. See docs/logger.md.
+
+
+Consumer-project reviews must use docs/consumer-architecture-contract.md for Core pinning, Caller/Page boundaries, template-first UI, required/optional hooks, explicit composition, supported themes, and backend policy authority. Documentation alone does not guarantee source-wide compatibility or runtime safety.
