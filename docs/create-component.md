@@ -67,3 +67,6 @@ A UI component has no dedicated Caller. If it needs data, the owning Feature/Opt
 
 
 **Page rule:** A Page must be a pure presentation boundary. Never add a PageCaller, fetch/API code or HTTP client import to a Page. Receive prepared data and callbacks from the Feature/Option orchestrator; use data-id for UI hooks.
+
+
+**No standalone Renderer:** Put presentation rendering logic in the Page or Component's existing implementation; a local `render()` method is fine. Do not create a separate `CounterRenderer.js` merely to forward rendered content, nor require a Renderer between the Feature and Page. Preserve the `data-id` contract and lifecycle ownership.
