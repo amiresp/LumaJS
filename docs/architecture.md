@@ -84,3 +84,8 @@ LumaJS has no standalone Renderer/Rendering tier. A Feature/Option obtains and p
 ## Shared diagnostic Logger
 
 A single optional, dependency-free logger exists in `js/shared/Logger.js`. It is not a Caller, Renderer, component, or Core dependency. Features/Options/apps import the utility directly for scoped diagnostics. Logging does not retrieve data and the host application controls the configured threshold. The existing Luma `onError` hook remains application-configurable and can forward to the Logger at bootstrap. See `docs/logger.md`.
+
+
+## Application-bootstrap logging boundary
+
+`createWebsite` and `createAdmin` use the shared Logger directly to report Luma runtime errors via `onError`; they preserve optional external `onError` callbacks and expose `logger` in their returned object. They accept `logging: {level, enabled}` at bootstrap, and consumers can subsequently toggle the shared singleton via `setLevel` or `setEnabled`. Core, Pages and GlobalComponents remain independent of the logging utility. No global error trap is installed. See `docs/logger.md`.
