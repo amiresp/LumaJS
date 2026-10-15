@@ -14,6 +14,7 @@ test("local Swiper Element hydrates slides fetched by GlobalCaller",async({page}
 });
 test("SwiperSlider rejects unsafe URLs and escapes textual slide content",async({page})=>{
   await page.goto("/examples/basic/");
+  await expect(page.locator('[data-luma="SwiperSlider"]')).toHaveAttribute("data-load-state","ready");
   const details=await page.evaluate(async()=>{
     const host=document.querySelector('[data-luma="SwiperSlider"]');
     const slider=(await import("/js/dependency/global/GlobalComponents/SwiperSlider/SwiperSlider.js")).create(host.querySelector('[data-id="root"]'));
