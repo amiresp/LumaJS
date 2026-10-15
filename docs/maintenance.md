@@ -40,3 +40,6 @@ For logging integration, keep the wiring in application bootstraps, ensure custo
 
 
 Consumer-project reviews must use docs/consumer-architecture-contract.md for Core pinning, Caller/Page boundaries, template-first UI, required/optional hooks, explicit composition, supported themes, and backend policy authority. Documentation alone does not guarantee source-wide compatibility or runtime safety.
+
+
+Swiper Element integration changes require the pinned vendor version/license, tests, docs/media-components.md and dependency review. Keep the data-access boundary in Feature/Option/application orchestration; `SwiperSlider` may not instantiate a Caller or require a CDN.
