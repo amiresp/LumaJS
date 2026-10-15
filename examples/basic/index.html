@@ -4,10 +4,12 @@
 <body>
   <h1>LumaJS — zero-build demo</h1>
   <p>Component behavior is JavaScript; themes provide HTML and CSS.</p>
-  <main><div data-luma="Slider"></div><div data-luma="Stories"></div><section><h2>Feedback playground</h2><p><button data-id="try-toast">Show toast</button> <button data-id="try-alert">Show alert</button> <button data-id="try-dialog">Open dialog</button></p><output data-id="dialog-result"></output></section><div data-luma="Toast"></div><div data-luma="Alert"></div><div data-luma="Dialog"></div></main>
+  <main><section><h2>Swiper Element (local) — data from GlobalCaller</h2><div data-luma="SwiperSlider"></div></section><div data-luma="Slider"></div><div data-luma="Stories"></div><section><h2>Feedback playground</h2><p><button data-id="try-toast">Show toast</button> <button data-id="try-alert">Show alert</button> <button data-id="try-dialog">Open dialog</button></p><output data-id="dialog-result"></output></section><div data-luma="Toast"></div><div data-luma="Alert"></div><div data-luma="Dialog"></div></main>
   <script type="module">
     import { Luma } from "../../js/core/Luma.js";
+    import { GlobalCaller } from "../../js/dependency/global/GlobalCaller.js";
     const runtime = new Luma({ base: "../../" });
+    runtime.register("SwiperSlider", { load: () => import("../../js/dependency/global/GlobalComponents/SwiperSlider/SwiperSlider.js") });
     runtime.register("Slider", { load: () => import("../../js/dependency/global/GlobalComponents/Slider/Slider.js") });
     runtime.register("Stories", { load: () => import("../../js/dependency/global/GlobalComponents/Stories/Stories.js") });
     runtime.register("Toast", { load: () => import("../../js/dependency/global/GlobalComponents/Toast/Toast.js") });
@@ -15,12 +17,18 @@
     runtime.register("Dialog", { load: () => import("../../js/dependency/global/GlobalComponents/Dialog/Dialog.js") });
     await runtime.hydrate();
     const instance = name => runtime.instances.get(document.querySelector('[data-luma="' + name + '"]'));
+    const caller = new GlobalCaller({base:"../../"});
+    const swiperSlider=instance("SwiperSlider");
+    swiperSlider.configure({pagination:{clickable:true},navigation:true,slidesPerView:1,loop:true});
+    // Caller belongs to app orchestration; Slider only receives prepared items.
+    try { swiperSlider.setItems(await caller.getJSON("examples/basic/swiper-items.json")); }
+    catch(error) { console.error("Unable to load slider gallery",error); }
     document.querySelector('[data-id="try-toast"]').addEventListener("click", () => instance("Toast")?.show("Saved successfully", { type: "success" }));
     document.querySelector('[data-id="try-alert"]').addEventListener("click", () => instance("Alert")?.show("This is an inline notice", { type: "info" }));
     document.querySelector('[data-id="try-dialog"]').addEventListener("click", async () => {
       const result = await instance("Dialog")?.open({ title: "Confirm action", message: "Would you like to continue?" });
       document.querySelector('[data-id="dialog-result"]').textContent = result ? "Confirmed" : "Cancelled";
     });
-    window.addEventListener("pagehide", () => { void runtime.destroy(); }, { once: true });
+    window.addEventListener("pagehide", () => { caller.destroy(); void runtime.destroy(); }, { once: true });
   </script>
 </body></html>
