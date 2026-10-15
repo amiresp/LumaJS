@@ -74,3 +74,24 @@ await slider.loadItems(async ({galleryType,maxItems,signal}) =>
 ```
 
 The `loadItems` callback is responsible for validating/normalizing API data to the generic slide array shape. Autoplay pause on hover/focus, reduced-motion handling, media cleanup and safe public URL checks are built in. Pointer-based swipe is supported. Remaining parity gaps include native Swiper shadow DOM features, sophisticated slide transitions and original Swiper lifecycle/event details; add an optional Swiper adapter rather than making it mandatory in Core.
+
+
+## SwiperSlider (optional Swiper Element web component)
+
+`SwiperSlider` is a separate GlobalComponent that uses the pinned local Swiper Element 11.2.4 UMD bundle under `third_party/swiper/swiper-element-bundle.min.js`. The project serves it from its own origin; no CDN is loaded. Attribution and MIT license: `third_party/swiper/LICENSE`. Include a `<div data-luma="SwiperSlider"></div>` in the page and mount through GlobalApp or register the controller in the runtime. `core-default` provides a theme `<template data-id="slide-template">` whose content is cloned and filled via safe DOM APIs.
+
+Configure `slider.configure({slidesPerView:1,spaceBetween:12,pagination:{clickable:true},navigation:true,loop:true})`. Supply `slider.setItems([{title,text,src,alt,link,linkText}])` with normalized objects, or `await slider.loadItems(loader,{signal})` with an injected callback. URLs accept only http/https; untrusted text goes into textContent. Slider never creates a Caller, fetches endpoints itself or owns domain mapping.
+
+Example application orchestration:
+
+```js
+import {GlobalCaller} from "/js/dependency/global/GlobalCaller.js";
+const caller=new GlobalCaller({base:"/"});
+const slider=app.get("SwiperSlider");
+try {
+  const data=await caller.getJSON("examples/basic/swiper-items.json");
+  slider.setItems(data); // data validated/normalized at the app boundary
+} finally { caller.destroy(); }
+```
+
+For a runnable no-backend example, visit `/examples/basic/`. The original Slider is preserved for compatibility. This component does not guarantee the same media and lifecycle behavior as the older Slider and Stories controllers.
