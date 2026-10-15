@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Local Swiper Element",
+    "text": "Swiper's web component runs from files bundled with LumaJS, without an external CDN.",
+    "src": "/examples/basic/banner-one.svg",
+    "alt": "Abstract indigo slides"
+  },
+  {
+    "title": "Feature-owned data loading",
+    "text": "GlobalCaller is invoked by the application, and the Slider receives normalized data.",
+    "src": "/examples/basic/banner-two.svg",
+    "alt": "Abstract cyan slides"
+  },
+  {
+    "title": "Theme-first markup",
+    "text": "Slide markup comes from the core-default HTML template, not strings inside JavaScript.",
+    "src": "/examples/basic/banner-three.svg",
+    "alt": "Abstract lavender slides"
+  }
+]
