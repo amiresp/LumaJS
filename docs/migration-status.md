@@ -107,3 +107,11 @@ No TypeScript, mandatory Node.js/npm, SSR, Web Components or required build pipe
 ## Consumer contract review
 
 The proposed 13-section architecture policy was evaluated and recorded in docs/consumer-architecture-contract.md. Consumer Core pinning, presentation-only Pages, Caller ownership, explicit component mounting, required/optional template hooks and server-side business authority are adopted. The stricter no-created-HTML application guideline does not mean every existing framework component already complies; existing dynamic DOM remains a future migration. DatePicker and ErrorState are not yet shipped global components.
+
+
+## Vendored Swiper Element
+
+- Added locally hosted Swiper Element 11.2.4 MIT bundle, `SwiperSlider` GlobalComponent and matching core-default HTML/CSS using template clones.
+- Kept the existing Slider API unchanged; SwiperSlider is an additional optional capability.
+- Basic playground fetches a local JSON gallery through app-owned GlobalCaller, then calls `setItems`, avoiding a Slider Caller.
+- Added browser regressions; Swiper Element is a separate integration rather than a complete migration of legacy Slider/Stories behavior.
