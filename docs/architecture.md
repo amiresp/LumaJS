@@ -94,3 +94,8 @@ A single optional, dependency-free logger exists in `js/shared/Logger.js`. It is
 ## Consumer architecture contract
 
 See docs/consumer-architecture-contract.md for the review of the 13 proposed sections. Core is immutable in consuming applications but maintainers may change upstream framework Core via reviewed tests. Pages render supplied view models; networking and business logic remain in Feature/Option orchestration. There is no standalone Renderer tier. New consumer component layouts belong to Theme HTML and CSS, with template cloning for repeated elements; existing framework-internal dynamic DOM is an explicit migration exception. Only currently implemented GlobalComponents can be claimed as available.
+
+
+## Local Swiper Element composition
+
+`SwiperSlider` is an optional global UI component backed by a pinned self-hosted third-party Swiper Element bundle (`third_party/swiper/`, MIT). Unlike the existing zero-dependency Slider, its underlying web component is lazily imported when instantiated. Repeated slide presentation nodes come from Theme HTML `<template>`; no domain data loading occurs inside the component. Feature/Option/app orchestration can use GlobalCaller once and then call `setItems` with normalized data. This does not modify Core or require per-component callers. See docs/media-components.md.
