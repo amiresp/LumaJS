@@ -232,3 +232,8 @@ Use `const {logger}=createWebsite({logging:{level:"warn",enabled:true}})` or the
 ## Consumer architecture contract
 
 The proposed 13-section contract was reviewed against the actual LumaJS source. Adopted rules and corrections: docs/consumer-architecture-contract.md. Consumer Core must match a pinned upstream revision. Page is presentation-only; Caller belongs to Feature/Option orchestration. No standalone Renderer is required. New consumer markup belongs to Theme templates, including repeated HTML template fragments. Existing framework internals still include dynamic DOM construction and require a separate migration before any blanket compliance claim. Backend remains the authority for business policy and tenant permissions.
+
+
+## Local Swiper Element slider
+
+The optional `SwiperSlider` GlobalComponent wraps a **vendored Swiper Element 11.2.4** bundle stored at `third_party/swiper/swiper-element-bundle.min.js` (MIT license in the same folder). No CDN or extra production package is required. `GlobalApp` registers `SwiperSlider` lazily, while the original `Slider` remains supported. Theme presentation lives in `themes/core-default/dependency/Global/SwiperSlider/` HTML/CSS and repeatable slides use the template element. Data must be retrieved by Feature/Option or app orchestration using its existing Caller (for example `GlobalCaller.getJSON`), then supplied to `slider.setItems(items)`; the component never owns a Caller. Try `npm run playground` and open `/examples/basic/`, which fetches `/examples/basic/swiper-items.json` with GlobalCaller. See docs/media-components.md.
