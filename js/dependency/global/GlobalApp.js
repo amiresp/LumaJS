@@ -1,5 +1,5 @@
 /** Global UI composition, outside Core; no business routes. */
-const MODULES=["Toast","Alert","Dialog","Slider","Stories","Icon","EmptyState","Loading","Button","Card","Badge","Accordion","Breadcrumb","Pagination","Sidebar","Select","DataGrid"];
+const MODULES=["Toast","Alert","Dialog","Slider","SwiperSlider","Stories","Icon","EmptyState","Loading","Button","Card","Badge","Accordion","Breadcrumb","Pagination","Sidebar","Select","DataGrid"];
 export class GlobalApp {
  constructor(runtime){this.runtime=runtime;this.registered=false;}
  register(){
